@@ -239,7 +239,7 @@ def test_kortin_saldo_ei_ylita_maksimiarvoa(self):
 
 ## Testien suorittamiselle oma tehtävä
 
-[Invoke-ohjeessa](./invoke.md) ohjeistetaan, miten projektille voi määritellä uudelleenkäytettäviä tehtäviä ja miten niitä voi suorittaa komentoriviltä. Määritellään testien suorittamista varten oma tehtävä, `test`. Tämä onnistuu määritellemällä tehtävät projektin juurihakemiston _tasks.py_-tiedostossa:
+[Invoke-ohjeessa](./invoke.md) ohjeistetaan, miten projektille voi määritellä uudelleenkäytettäviä tehtäviä ja miten niitä voi suorittaa komentoriviltä. Määritellään testien suorittamista varten oma tehtävä, `test`. Tämä onnistuu määrittelemällä tehtävä projektin juurihakemiston _tasks.py_-tiedostossa:
 
 ```python
 from invoke import task
