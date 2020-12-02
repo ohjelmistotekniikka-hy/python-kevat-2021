@@ -432,7 +432,7 @@ Sovelluksen koodiin ei ole syytä kovakoodata mitään konfiguraatioita, kuten s
 
 Konfiguraatiot on syytä määritellä ohjelman ulkopuolella, esim. erillisissä konfiguraatiotiedostoissa. Ei siis välttämättä kannatta ottaa mallia edellisten esimerkkien tavasta kovakoodata tiedostojen polkuja esimerkiksi SQLite-tietokanna yhteyden muodostamisessa.
 
-Eräs tapa sovelluksen konfigurointiin on käyttää niin kutsuttuja _ympäristömuuttujia_ Ympäristömuuttujiin pääsee koodissa käsiksi mm. [os](https://docs.python.org/3/library/os.html)-moduulin [getenv](https://docs.python.org/3/library/os.html#os.getenv)-funktion avulla. Yksinkertaisin tapa määritellä sovellukselle ympäristömuuttujia on määritellä ne sovelluksen suorituksen yhteydessä komentoriviltä:
+Eräs tapa sovelluksen konfigurointiin on käyttää niin kutsuttuja _ympäristömuuttujia_. Ympäristömuuttujiin pääsee koodissa käsiksi mm. [os](https://docs.python.org/3/library/os.html)-moduulin [getenv](https://docs.python.org/3/library/os.html#os.getenv)-funktion avulla. Yksinkertaisin tapa määritellä sovellukselle ympäristömuuttujia on määritellä ne sovelluksen suorituksen yhteydessä komentoriviltä:
 
 ```
 FOO=bar poetry run python3 src/index.py
