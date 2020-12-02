@@ -512,7 +512,7 @@ print(FOO)
 print(LOREM)
 ```
 
-Testeille on usein käytössä eri konfiguraatio, kuin muulla koodilla. Esimerkiksi testien kannattaa käyttää SQLite-tietokannan kanssa eri tiedostoa. Tätä varten voimme tehdä projektin juurihakemistoon erillisen _.env.test_-tiedoston, jonne määritellään testien käyttämät ympäristömuuttujat.
+Testeille on usein käytössä eri konfiguraatio, kuin normaalisti suoritettavalle koodille. Esimerkiksi testien kannattaa käyttää SQLite-tietokannan kanssa eri tiedostoa. Tätä varten voimme tehdä projektin juurihakemistoon erillisen _.env.test_-tiedoston, jonne määritellään testien käyttämät ympäristömuuttujat.
 
 Näiden ympäristömuuttujien lataaminen onnistuu pytestin [pytest-dotenv](https://pypi.org/project/pytest-dotenv/)-lisäosalla. Sen asentaminen onnistuu seuraavalla komennolla:
 
@@ -529,6 +529,8 @@ env_files =
 ```
 
 Nyt testit, jotka suoritetaan `pytest`-komennolla, käyttävät _.env.test_-tiedossa määriteltyjä ympäristömuuttujia.
+
+Huomaa, että edellisen esimerkin `load_dotenv`-funktio lataa ympäristömuuttujat myös testeissä _.env_-tiedostosta, mutta se ei oletusarvoisesti ylikirjoita jo määriteltyjä muuttujia. Koska pytest-dotenv-lisäosa lataa ympäristömuuttujat ennen `load_dotenv`-funtiota, on testeissä ensisijaisesti käytössä _.env.test_-tiedossa määritellyt ympäristömuuttujat.
 
 Mallia oman projektin konfiguroimiseksi ympäristömuuttujilla voi ottaa edellä esitettyjen esimerkkien lisäksi myös [referenssisovelluksesta](https://github.com/ohjelmistotekniikka-hy/python-todo-app).
 
