@@ -100,7 +100,7 @@ cowsay = "^2.0.3"
 `add`-komento asentaa projektiin kirjaston uusimman version, joka oli komennon suoritushetkellä `2.0.3`. Usein tämä on juuri se, mitä haluamme tehdä. Voimme kuitenkin asentaa halutessamme esimerkiksi cowsay-kirjaston version `1.0` komennolla:
 
 ```bash
-python -m poetry add cowsay@1.0
+poetry add cowsay@1.0
 ```
 
 Jos haluaisimme poistaa kirjaston projektimme riippuvuuksien joukosta, se onnistuisi komennolla:
