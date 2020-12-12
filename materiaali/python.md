@@ -12,6 +12,7 @@ Tarkastellaan erästä mallia tekstikäyttöliittymän toteuttamiselle. Otetaan 
 
 ```python
 from numero_ja_osoite_palvelu import NumeroJaOsoitePalvelu
+from konsoli_io import KonsoliIO
 
 KOMENNOT = {
     "x": "x lopeta",
@@ -27,19 +28,18 @@ KOMENNOT = {
 
 class Numerotiedustelu:
     def __init__(self):
-        self._lue = input
-        self._tulosta = print
+        self._io = KonsoliIO()
         self._palvelu = NumeroJaOsoitePalvelu()
 
     def kaynnista(self):
-        self._tulosta("numerotiedustelu")
+        self._io.tulosta("numerotiedustelu")
         self._tulosta_ohje()
 
         while True:
-            komento = self._lue("komento: ")
+            komento = self._io.lue("komento: ")
 
             if not komento in KOMENNOT:
-                self._tulosta("virheellinen komento")
+                self._io.tulosta("virheellinen komento")
                 self._tulosta_ohje()
                 continue
 
@@ -61,26 +61,26 @@ class Numerotiedustelu:
                 self._listaus()
 
     def _hae_numerot(self):
-        nimi = self._tulosta("kenen: ")
+        nimi = self._io.tulosta("kenen: ")
         numerot = self._palvelu.hae_numerot(nimi)
 
         if len(numerot) == 0:
-            self._tulosta("ei löytynyt")
+            self._io.tulosta("ei löytynyt")
             return
 
         for numero in numerot:
-            self._tulosta(numero)
+            self._io.tulosta(numero)
 
     def _lisaa_numero(self):
-        nimi = self._lue("kenelle: ")
-        numero = self._lue("numero: ")
+        nimi = self._io.lue("kenelle: ")
+        numero = self._io.lue("numero: ")
 
         self.palvelu._lisaa_numero(nimi, numero)
 
     # lisää käyttöliittymäfunktioita...
 ```
 
-Käytössäolevat komennot on tallennettu `KOMENNOT`-nimiseen [dictionaryyn](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), jonka avaimina toimivat komentojen nimet ja arvoina niiden kuvaukset. Käyttöliittymää varten on toteutettu `Numerotiedustelu`-luokka. Luokan konstruktori alustaa oliomuuttujat `lue`, `tulosta` ja `palvelu`. Attribuutteihin `lue` ja `tulosta` tallennetaan viittaukset tuttuihin [print](https://docs.python.org/3/library/functions.html#print)- ja [input](https://docs.python.org/3/library/functions.html#input)-funktioihin. Attribuuttiin `palvelu` sen sijaan tallenetaan `NumeroJaOsoitePalvelu`-luokan olio, jonka avulla voimme tehdä puhelinnumeroihin liittyviä operaatioita. Luokan käyttö on tapa erottaa sovelluslogiikka käyttöliittymästä, joka on periaatteena erittäin tärkeä.
+Käytössäolevat komennot on tallennettu `KOMENNOT`-nimiseen [dictionaryyn](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), jonka avaimina toimivat komentojen nimet ja arvoina niiden kuvaukset. Käyttöliittymää varten on toteutettu `Numerotiedustelu`-luokka. Luokan konstruktori alustaa oliomuuttujat `io` ja `palvelu`. Attribuuttiin `io` tallennetaan `KonsoliIO`-luokan olio, jonka avulla voimme lukea käyttäjän syötteitä ja tulostaa viestejä komentoriville. Attribuuttiin `palvelu` puolestaan tallenetaan `NumeroJaOsoitePalvelu`-luokan olio, jonka avulla voimme tehdä puhelinnumeroihin liittyviä operaatioita. Erilisen sovelluslogiikasta vastaavan luokan käyttö on tapa erottaa sovelluslogiikka käyttöliittymästä, joka on periaatteena erittäin tärkeä.
 
 `Numerotiedustelu`-luokan `kaynnista`-metodi käynnistää käyttöliittymän. Metodi `tulosta_ohje` tulostaa käyttäjälle käytössäolevat komennot. Tämän jälkeen käyttäjältä aletaan pyytää komentoja `while True`-silmukassa.
 
@@ -89,16 +89,15 @@ Jos komentojen määrä kasvaa, voi harkita esimerkiksi [Command](https://en.wik
 ```python
 class LisaaNumeroKomento:
     def __init__():
-        self._lue = input
-        self._tulosta = print
+        self._io = KonsoliIO()
         self._palvelu = NumeroJaOsoitePalvelu()
 
     def tulosta_ohje():
         return "1 lisää numero"
 
     def suorita():
-        nimi = self._lue("kenelle: ")
-        numero = self._lue("numero: ")
+        nimi = self._io.lue("kenelle: ")
+        numero = self._io.lue("numero: ")
 
         self._palvelu.lisaa_numero(nimi, numero)
 ```
@@ -108,8 +107,8 @@ Kaikilla komentoluokilla on siis metodit `tulosta_ohje` ja `suorita`. Komennot v
 ```python
 class Numerotiedustelu:
     def __init__(self):
-        self._lue = input
-        self._tulosta = print
+        self._io = KonsoliIO()
+        self._palvelu = NumeroJaOsoitePalvelu()
 
         self._komennot = {
             "x": LopetaKomento()
@@ -120,18 +119,18 @@ class Numerotiedustelu:
     # ...
 ```
 
-Tämä yksinkertaistaa `Numerotiedustelu`-luokan `kaynnista`-metodia:
+Tämä yksinkertaistaa `Numerotiedustelu`-luokan `kaynnista`-metodia huomattavasti:
 
 ```python
 def kaynnista(self):
-    self._tulosta("numerotiedustelu")
+    self._io.tulosta("numerotiedustelu")
     self._tulosta_ohje()
 
     while True:
-        komento = self._lue("komento: ")
+        komento = self._io.lue("komento: ")
 
-        if not komento in self.komennot:
-            self._tulosta("virheellinen komento")
+        if not komento in self._komennot:
+            self._io.tulosta("virheellinen komento")
             self._tulosta_ohje()
             continue
 
@@ -150,13 +149,12 @@ Graafinen käyttöliittymä eroaa tekstikäyttöliittymästä siinä, että kome
 
 ## Riippuvuuksien injektointi
 
-Edellä esitetyn `Numerotiedustelu`-luokan attribuutit `lue`, `tulosta` ja `palvelu` alustettiin suoraan konstruktorissa:
+Edellä esitetyn `Numerotiedustelu`-luokan attribuutit `io` ja `palvelu` alustettiin suoraan konstruktorissa:
 
 ```python
 class Numerotiedustelu:
     def __init__(self):
-        self._lue = input
-        self._tulosta = print
+        self._io = KonsoliIO()
         self._palvelu = NumeroJaOsoitePalvelu()
 
 # ...
@@ -164,13 +162,12 @@ class Numerotiedustelu:
 
 Näitä attribuutteja voidaan pitää luokan _riippuvuuksina_, eli toiminnallisuuksina, joita luokka käyttää. Nämä riippuvuudet ovat tällä hetkellä varsin _konkreettisia_, koska tiedämme esimerkiksi täsmälleen, miten syötteet luetaan. Jos haluaisimme lukea syötteitä esimerkiksi tiedostosta, vaatisi se muutoksia luokan koodiin.
 
-_Riippuvuuksien injektointi_ on ohjelmointitekniikka, jonka avulla pyritään eroon konkreettisista riippuvuuksista. Tekniikan perusideana on, että riippuvuudet annetaan konstruktorille, metodille, tai funktiolle sen kutsun yhteydessä. Tällöin riippuvuuksien käyttäjä ei tiedä riippuvuuksien toteutuksesta mitään, eli ne ovat _abstrakteja_. `Numerotiedustelu`-luokan tapauksessa `lue`-, `tulosta`- ja `palvelu`-attribuutit saisivat arvonsa konstruktorin parametrien kautta:
+_Riippuvuuksien injektointi_ on ohjelmointitekniikka, jonka avulla pyritään eroon konkreettisista riippuvuuksista. Tekniikan perusideana on, että riippuvuudet annetaan konstruktorille, metodille, tai funktiolle sen kutsun yhteydessä. Tällöin riippuvuuksien käyttäjä ei tiedä riippuvuuksien toteutuksesta mitään, eli ne ovat _abstrakteja_. `Numerotiedustelu`-luokan tapauksessa `io`- ja `palvelu`-attribuutit saisivat arvonsa konstruktorin parametrien kautta:
 
 ```python
 class Numerotiedustelu:
-    def __init__(lue, tulosta, palvelu):
-        self._lue = lue
-        self._tulosta = tulosta
+    def __init__(io, palvelu):
+        self._io = io
         self._palvelu = palvelu
 
     # ...
@@ -180,7 +177,8 @@ Voimme alustaa `Numerotiedustelu`-olion seuraavasti:
 
 ```python
 palvelu = NumeroJaOsoitePalvelu()
-numerotiedustelu = Numerotiedustelu(input, print, palvelu)
+io = KonsoliIO()
+numerotiedustelu = Numerotiedustelu(io, palvelu)
 numerotiedustelu.kaynnista()
 ```
 
@@ -202,30 +200,41 @@ Voimme yksinkertaisesti antaa `Numerotiedustelu`-luokalle riippuvuutena `Tietoka
 
 ```python
 palvelu = TietokantaNumeroJaOsoitePalvelu()
-numerotiedustelu = Numerotiedustelu(input, print, palvelu)
+io = KonsoliIO()
+numerotiedustelu = Numerotiedustelu(io, palvelu)
 numerotiedustelu.kaynnista()
 ```
 
-Riippuvuuksien injektointi osoittaa myös erittäin hyödylliseksi testaamisessa. Pythonin `input`- ja `output`-funktioiden käyttö tekee testaamisesta erittäin hankalaa. Koska injektoimme riippuvuudet, voimme toteuttaa niille toteutukset, jotka ovat käyttökelpoisia testeissä:
+Riippuvuuksien injektointi osoittaa myös erittäin hyödylliseksi testaamisessa. `Numerotiedustelu`-luokan tapauksessa `KonsoliIO`-luokan käyttämät `input`- ja `output`-funktiot tekevät testaamisesta erittäin hankalaa. Koska injektoimme riippuvuudet, voimme antaa testeissä konstruktorin `io`-parametriksi helposti testattavan luokan olion:
 
 ```python
 import unittest
 from numerotiedustelu import Numerotiedustelu
 
+class StubIO:
+    def __init__(self, syotteet):
+        self.syotteet = syotteet
+        self.tulosteet = []
+
+    def lue(self, teksti):
+        return self.syotteet.pop(0)
+
+    def tulosta(self, teksti):
+        self.tulosteet.append(teksti)
 
 class TestNumerotiedustelu(unittest.TestCase):
     def test_numeron_lisays_lisaa_tiedot_oikein(self):
         syotteet = ["1", "Kalle Ilves", "040-123456", "x"]
-        tulosteet = []
+        io = StubIO(syotteet)
 
-        lue = lambda viesti: syotteet.pop(0)
-        tulosta = lambda viesti: tulosteet.append(viesti)
         palvelu = NumeroJaOsoitePalvelu()
         numerotiedustelu = Numerotiedustelu(lue, tulosta, palvelu)
         numerotiedustelu.kaynnista()
 
-        # varmista assert-lauseella että ohjelman tulostus oli halutun kaltainen
+        # varmista assert-lauseella että io.tulosteet on halutun kaltainen
 ```
+
+`StubIO`-luokka toteuttaa metodit `lue` ja `tulosta`, kuten `KonsoliIO`-luokka. Erona on, että `StubIO`-luokan syötteet määräytyvät konstruktorin kautta annetun listan perusteella, eikä komentoriviltä annettujen söytteiden perusteella. Lisäksi tulostetut arvot tallenetaan listaan, eika niitä kirjoita komentoriville. Tämä mahdollistaa sen, että voimme helposti tarkastella sovelluksen tuottamia tulosteita annettujen syötteiden perusteella. 
 
 ## Tietojen tallennus
 

@@ -592,7 +592,7 @@ class FakeUserRepository:
     # ...
 ```
 
-repositorioiden valekomponentit injektoidaan testattavalle luokalle:
+Repositorioiden valekomponentit injektoidaan testattavalle luokalle:
 
 ```python
 class TestTodoService(unittest.TestCase):
