@@ -302,20 +302,20 @@ Tarkastellaan toisena esimerkkinä riippuvuudesta todo-sovelluksen sovelluslogii
 ```python
 class TodoService:
     def __init__(self, todo_repository, user_repository):
-        self.user = None
-        self.todo_repository = todo_repository
-        self.user_repository = user_repository
+        self._user = None
+        self._todo_repository = todo_repository
+        self._user_repository = user_repository
 
     def create_todo(self, content):
-        todo = Todo(content=content, user=self.user)
+        todo = Todo(content=content, user=self._user)
 
-        return self.todo_repository.create(todo)
+        return self._todo_repository.create(todo)
 
     def get_undone_todos(self):
-        if not self.user:
+        if not self._user:
             return []
 
-        todos = self.todo_repository.find_by_username(self.user.username)
+        todos = self._todo_repository.find_by_username(self._user.username)
         undone_todos = filter(lambda todo: not todo.done, todos)
 
         return list(undone_todos)
@@ -409,19 +409,19 @@ class Henkilo:
 
 class Henkilostorekisteri:
     def __init__(self):
-        self.henkilot = {}
-        self.pankki = PankkiRajapinta()
+        self._henkilot = {}
+        self._pankki = PankkiRajapinta()
     
     def lisaa(self, henkilo):
-        self.henkilot[henkilo.nimi] = henkilo
+        self._henkilot[henkilo.nimi] = henkilo
     
     def suorita_palkanmaksu(self):
-        for nimi in self.henkilot:
-            henkilo = self.henkilot[nimi]
-            self.pankki.maksa_palkka(henkilo.tilinumero, henkilo.palkka)
+        for nimi in self._henkilot:
+            henkilo = self._henkilot[nimi]
+            self._pankki.maksa_palkka(henkilo.tilinumero, henkilo.palkka)
     
     def aseta_palkka(self, nimi, uusi_palkka):
-        henkilo = self.henkilot[nimi]
+        henkilo = self._henkilot[nimi]
         henkilo.palkka = uusi_palkka
 
 class PankkiRajapinta:
@@ -529,8 +529,8 @@ Sovelluslogiikasta huolehtiva `TodoService`-olio tarvitsee toimiakseen `TodoRepo
 ```python
 class TodoService:
     def __init__(self, todo_repository, user_repository):
-        self.todo_repository = todo_repository
-        self.user_repository = user_repository
+        self._todo_repository = todo_repository
+        self._user_repository = user_repository
 ```
 
 Parametreille voi antaa myös oletusarvot, jolloin ne voi määritellä vain halutessaan:
@@ -550,8 +550,8 @@ class TodoService:
         todo_repository=default_todo_repository,
         user_repository=default_user_repository
     ):
-        self.todo_repository = todo_repository
-        self.user_repository = user_repository
+        self._todo_repository = todo_repository
+        self._user_repository = user_repository
 ```
 
 Riippuvuuksien injektointi onnistuu luokkien lisäksi myös esimerkiksi funktioilla:
@@ -584,10 +584,10 @@ Todo-sovelluksessa on luokkaa `TodoService` testattu juuri näin. Esim. `UserRep
 ```python
 class FakeUserRepository:
     def __init__(self, users=None):
-        self.users = users or []
+        self._users = users or []
 
     def find_all(self):
-        return self.users
+        return self._users
     
     # ...
 ```

@@ -11,9 +11,10 @@ Alla luetellaan Clean Code -periaatteita noudattavan koodin laatuvaatimukset. Oh
 - Käytä mahdollisimman kuvaavia nimiä kaikkialla
   - Luokkien nimet aina isolla alkukirjaimella ja _camelCase_-formaatissa
 - Metodit, attribuutit, parametrit ja muuttujat aina <i>snake_case</i>-formaatissa
+- Jos luokan metodin tai attribuutin on tarkoitus olla vain luokan sisäisessä käytössä, [on tapana](https://google.github.io/styleguide/pyguide.html#3162-naming-conventions) käyttää nimessä `_`- tai `__`-etuliitettä
 - Muuttujat, joilla on iso käyttöalue, tulee olla erittäin selkeästi nimettyjä
 - Lyhyen metodin sisäisille muuttujille riittää yleensä lyhyempi nimi
-- Jos metodia käytetään vähän, tulee nimen olla mahdollisimman kuvaava.
+- Jos metodia käytetään vähän, tulee nimen olla mahdollisimman kuvaava
 - Tee nimentä englanniksi
 
 ### 2. Ei pitkiä metodeja tai funktioita

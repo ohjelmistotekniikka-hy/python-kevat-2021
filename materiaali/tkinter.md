@@ -35,10 +35,10 @@ from tkinter import Tk, ttk
 
 class UI:
     def __init__(self, root):
-        self.root = root
+        self._root = root
 
     def start(self):
-        label = ttk.Label(master=self.root, text="Hello world!")
+        label = ttk.Label(master=self._root, text="Hello world!")
 
         label.pack()
 
@@ -57,11 +57,11 @@ Huomaa, ettei komponettia näytetä ennen `pack`-metodin kutsua. Tutustumme meto
 
 ```python
 def start(self):
-    label = ttk.Label(master=self.root, text="Hello world!")
-    button = ttk.Button(master=self.root, text="Button")
-    entry = ttk.Entry(master=self.root)
-    checkbutton = ttk.Checkbutton(master=self.root, text="Check button")
-    radiobutton = ttk.Radiobutton(master=self.root, text="Radio button")
+    label = ttk.Label(master=self._root, text="Hello world!")
+    button = ttk.Button(master=self._root, text="Button")
+    entry = ttk.Entry(master=self._root)
+    checkbutton = ttk.Checkbutton(master=self._root, text="Check button")
+    radiobutton = ttk.Radiobutton(master=self._root, text="Radio button")
 
     label.pack()
     button.pack()
@@ -84,14 +84,14 @@ from tkinter import Tk, ttk, constants
 
 class UI:
     def __init__(self, root):
-        self.root = root
+        self._root = root
 
     def start(self):
-        label = ttk.Label(master=self.root, text="Hello world!")
-        button = ttk.Button(master=self.root, text="Button")
-        entry = ttk.Entry(master=self.root)
-        checkbutton = ttk.Checkbutton(master=self.root, text="Check button")
-        radiobutton = ttk.Radiobutton(master=self.root, text="Radio button")
+        label = ttk.Label(master=self._root, text="Hello world!")
+        button = ttk.Button(master=self._root, text="Button")
+        entry = ttk.Entry(master=self._root)
+        checkbutton = ttk.Checkbutton(master=self._root, text="Check button")
+        radiobutton = ttk.Radiobutton(master=self._root, text="Radio button")
 
         label.pack(side=constants.LEFT)
         button.pack(side=constants.LEFT)
@@ -106,15 +106,15 @@ Komponenttien asettelussa `pack`-metodin käyttöä käytännöllisempää on k�
 
 ```python
 def start(self):
-    heading_label = ttk.Label(master=self.root, text="Login")
+    heading_label = ttk.Label(master=self._root, text="Login")
 
-    username_label = ttk.Label(master=self.root, text="Username")
-    username_entry = ttk.Entry(master=self.root)
+    username_label = ttk.Label(master=self._root, text="Username")
+    username_entry = ttk.Entry(master=self._root)
 
-    password_label = ttk.Label(master=self.root, text="Password")
-    password_entry = ttk.Entry(master=self.root)
+    password_label = ttk.Label(master=self._root, text="Password")
+    password_entry = ttk.Entry(master=self._root)
 
-    button = ttk.Button(master=self.root, text="Button")
+    button = ttk.Button(master=self._root, text="Button")
 
     heading_label.grid(row=0, column=0, columnspan=2)
 
@@ -141,15 +141,15 @@ Olemme käyttöliittymään melko tyytyväisiä, mutta pari pientä yksityiskoht
 
 ```python
 def start(self):
-    heading_label = ttk.Label(master=self.root, text="Login")
+    heading_label = ttk.Label(master=self._root, text="Login")
 
-    username_label = ttk.Label(master=self.root, text="Username")
-    username_entry = ttk.Entry(master=self.root)
+    username_label = ttk.Label(master=self._root, text="Username")
+    username_entry = ttk.Entry(master=self._root)
 
-    password_label = ttk.Label(master=self.root, text="Password")
-    password_entry = ttk.Entry(master=self.root)
+    password_label = ttk.Label(master=self._root, text="Password")
+    password_entry = ttk.Entry(master=self._root)
 
-    button = ttk.Button(master=self.root, text="Button")
+    button = ttk.Button(master=self._root, text="Button")
 
     heading_label.grid(row=0, column=0, columnspan=2)
 
@@ -162,7 +162,7 @@ def start(self):
     button.grid(row=3, column=0, columnspan=2)
 
     # konfiguroidaan toisen sarakkeen painoksi 1
-    self.root.grid_columnconfigure(1, weight=1)
+    self._root.grid_columnconfigure(1, weight=1)
 ```
 
 `grid_columnconfigure`-metodia tulee kutsua `master`-parametrin kautta annetulle juurikomponentille. Konfiguroimme toisen sarakkeen (huomaa, että indeksi alkaa nollasta) painoksi 1. Tämä tarkoittaa, että sarake ottaa kaiken vapaana olevan tilan leveyssuunnassa.
@@ -171,15 +171,15 @@ Käyttöliittymä ei tämänkään muutokseen jälkeen näytä siltä, miltä pi
 
 ```python
 def start(self):
-    heading_label = ttk.Label(master=self.root, text="Login")
+    heading_label = ttk.Label(master=self._root, text="Login")
 
-    username_label = ttk.Label(master=self.root, text="Username")
-    username_entry = ttk.Entry(master=self.root)
+    username_label = ttk.Label(master=self._root, text="Username")
+    username_entry = ttk.Entry(master=self._root)
 
-    password_label = ttk.Label(master=self.root, text="Password")
-    password_entry = ttk.Entry(master=self.root)
+    password_label = ttk.Label(master=self._root, text="Password")
+    password_entry = ttk.Entry(master=self._root)
 
-    button = ttk.Button(master=self.root, text="Button")
+    button = ttk.Button(master=self._root, text="Button")
 
     # vasempaan laitaan
     heading_label.grid(row=0, column=0, columnspan=2, sticky=constants.W)
@@ -195,7 +195,7 @@ def start(self):
     # vasempaan ja oikeaan laitaan
     button.grid(row=3, column=0, columnspan=2, sticky=(constants.E, constants.W))
 
-    self.root.grid_columnconfigure(1, weight=1)
+    self._root.grid_columnconfigure(1, weight=1)
 ```
 
 Nyt käyttöliittymä näyttää seuraavalta:
@@ -237,7 +237,7 @@ Lopputulos näyttää seuraavalta:
 Tällä hetkellä käyttöliittymän tekstikentät ovat hieman kapeita. Voimme leventää niitä konfiguroimalla niiden sarakkeen `minsize`-parametria. Tekstikentät ovat toisessa sarakkeessa, joten konfiguraatio onnistuu seuraavasti:
 
 ```python
-self.root.grid_columnconfigure(1, weight=1, minsize=300)
+self._root.grid_columnconfigure(1, weight=1, minsize=300)
 ```
 
 Nyt tekstikenttät ovat automaattisesti leveämpiä, mutta myös levenevät, kun ikkunan leveyttä muutetaan:
@@ -253,12 +253,12 @@ from tkinter import Tk, ttk
 
 class UI:
     def __init__(self, root):
-        self.root = root
-        self.entry = None
+        self._root = root
+        self._entry = None
 
     def start(self):
-        self.entry = ttk.Entry(master=self.root)
-        button = ttk.Button(master=self.root, text="Button")
+        self._entry = ttk.Entry(master=self._root)
+        button = ttk.Button(master=self._root, text="Button")
 
         entry.grid(row=0, column=0)
         button.grid(row=1, column=0)
@@ -277,25 +277,24 @@ Lisätään koodiin toiminallisuus, joka tulostaa tekstikentän arvon, kun paini
 ```python
 class UI:
     def __init__(self, root):
-        self.root = root
-        self.entry = None
-
-    def handle_button_click(self):
-        entry_value = self.entry.get()
-        print(f"Value of entry is: {entry_value}")
+        self._root = root
+        self._entry = None
 
     def start(self):
-        self.entry = ttk.Entry(master=self.root)
+        self._entry = ttk.Entry(master=self._root)
 
         button = ttk.Button(
-          master=self.root,
+          master=self._root,
           text="Button",
-          command=self.handle_button_click
+          command=self._handle_button_click
         )
 
         entry.grid(row=0, column=0)
         button.grid(row=1, column=0)
-
+    
+    def _handle_button_click(self):
+        entry_value = self._entry.get()
+        print(f"Value of entry is: {entry_value}")
 # ...
 ```
 
@@ -305,13 +304,13 @@ class UI:
 button_a = ttk.Button(
     master=self.root,
     text="Button A",
-    command=lambda: self.handle_button_click('button a')
+    command=lambda: self._handle_button_click('button a')
 )
 
 button_a = ttk.Button(
     master=self.root,
     text="Button B",
-    command=lambda: self.handle_button_click('button b')
+    command=lambda: self._handle_button_click('button b')
 )
 ```
 
@@ -326,25 +325,30 @@ from tkinter import ttk, constants
 
 class HelloView:
     def __init__(self, root, handle_good_bye):
-        self.root = root
-        self.handle_good_bye = handle_good_bye
-        self.frame = None
+        self._root = root
+        self._handle_good_bye = handle_good_bye
+        self._frame = None
 
-        self.initialize()
-
-    def initialize(self):
-        self.frame = ttk.Frame(master=self.root)
-        label = ttk.Label(master=self.frame, text="Hello!")
-        button = ttk.Button(master=self.frame, text="Say good bye", command=self.handle_good_bye)
-
-        label.grid(row=0, column=0)
-        button.grid(row=1, column=0)
+        self._initialize()
 
     def pack(self):
         self.frame.pack(fill=constants.X)
 
     def destroy(self):
         self.frame.destroy()
+    
+    def _initialize(self):
+        self._frame = ttk.Frame(master=self._root)
+        label = ttk.Label(master=self._frame, text="Hello!")
+        
+        button = ttk.Button(
+            master=self._frame,
+            text="Say good bye",
+            command=self._handle_good_bye
+        )
+
+        label.grid(row=0, column=0)
+        button.grid(row=1, column=0)
 ```
 
 Luokan `initialize`-metodissa määritellään meille ennestään tuntematon, `Frame`-komponentti. `Frame`-komponentilla ei ole visuaalisesti mitään erityispiirteitä, mutta se on erittäin kätevä esimerkiksi komponenttien ryhmittelyssä. Haluamme eristää näkymän komponentit muiden näkymien komponenteista, joten liitämme ne `master`-parametrin kautta `frame`-komponenttiin. Tämä mahdollistaa sen, että voimme näyttää kaikki näkymän komponentit kerralla luokan `pack`-metodin avulla. Lisäksi voimme tuhota kaikki näkymän komponentit luokan `destroy`-metodilla. Kun komponentti tuhotaan, myös sen lapsikomponentit, eli `master`-parametrin avulla liitetyt komponentit tuhotaan.
@@ -357,22 +361,22 @@ from hello_view import HelloView
 
 class UI:
     def __init__(self, root):
-        self.root = root
-        self.current_view = None
-
-    def handle_good_bye(self):
-        print("User wants to say good bye")
-
-    def show_hello_view(self):
-        self.current_view = HelloView(
-            self.root,
-            self.handle_good_bye
-        )
-
-        self.current_view.pack()
+        self._root = root
+        self._current_view = None
 
     def start(self):
-        self.show_hello_view()
+        self._show_hello_view()
+    
+    def _handle_good_bye(self):
+        print("User wants to say good bye")
+
+    def _show_hello_view(self):
+        self._current_view = HelloView(
+            self._root,
+            self._handle_good_bye
+        )
+
+        self._current_view.pack()
 
 window = Tk()
 window.title("TkInter example")
@@ -390,25 +394,30 @@ from tkinter import ttk, constants
 
 class GoodByeView:
     def __init__(self, root, handle_hello):
-        self.root = root
-        self.handle_hello = handle_hello
-        self.frame = None
+        self._root = root
+        self._handle_hello = handle_hello
+        self._frame = None
 
-        self.initialize()
+        self._initialize()
 
-    def initialize(self):
-        self.frame = ttk.Frame(master=self.root)
-        label = ttk.Label(master=self.frame, text="Good bye!")
-        button = ttk.Button(master=self.frame, text="Say hello", command=self.handle_hello)
+    def pack(self):
+        self._frame.pack(fill=constants.X)
+
+    def destroy(self):
+        self._frame.destroy()
+    
+    def _initialize(self):
+        self._frame = ttk.Frame(master=self._root)
+        label = ttk.Label(master=self._frame, text="Good bye!")
+
+        button = ttk.Button(
+            master=self._frame,
+            text="Say hello",
+            command=self._handle_hello
+        )
 
         label.grid(row=0, column=0)
         button.grid(row=1, column=0)
-
-    def pack(self):
-        self.frame.pack(fill=constants.X)
-
-    def destroy(self):
-        self.frame.destroy()
 ```
 
 Muokataan `UI`-luokkaa niin, että käyttäjä voi siirtyä näiden kahden näkymän välillä painamalla näkymien painikkeita:
@@ -420,43 +429,43 @@ from good_bye_view import GoodByeView
 
 class UI:
     def __init__(self, root):
-        self.root = root
-        self.current_view = None
-
-    def hide_current_view(self):
-        if self.current_view:
-            self.current_view.destroy()
-
-        self.current_view = None
-
-    def handle_good_bye(self):
-        self.show_good_bye_view()
-
-    def handle_hello(self):
-        self.show_hello_view()
-
-    def show_hello_view(self):
-        self.hide_current_view()
-
-        self.current_view = HelloView(
-            self.root,
-            self.handle_good_bye
-        )
-
-        self.current_view.pack()
-
-    def show_good_bye_view(self):
-        self.hide_current_view()
-
-        self.current_view = GoodByeView(
-            self.root,
-            self.handle_hello
-        )
-
-        self.current_view.pack()
+        self._root = root
+        self._current_view = None
 
     def start(self):
-        self.show_hello_view()
+        self._show_hello_view()
+
+    def _hide_current_view(self):
+        if self._current_view:
+            self._current_view.destroy()
+
+        self._current_view = None
+
+    def _handle_good_bye(self):
+        self._show_good_bye_view()
+
+    def _handle_hello(self):
+        self._show_hello_view()
+
+    def _show_hello_view(self):
+        self._hide_current_view()
+
+        self._current_view = HelloView(
+            self._root,
+            self._handle_good_bye
+        )
+
+        self._current_view.pack()
+
+    def _show_good_bye_view(self):
+        self._hide_current_view()
+
+        self._current_view = GoodByeView(
+            self._root,
+            self._handle_hello
+        )
+
+        self._current_view.pack()
 
 # ...
 ```
@@ -476,32 +485,42 @@ from tkinter import Tk, ttk, StringVar
 
 class UI:
     def __init__(self, root):
-        self.root = root
-        self.label_var = None
-
-    def increase(self):
-        value = self.label_var.get()
-        increased_value = str(int(value) + 1)
-
-        self.label_var.set(increased_value)
-
-    def decrease(self):
-        value = self.label_var.get()
-        decreased_value = str(int(value) - 1)
-
-        self.label_var.set(decreased_value)
+        self._root = root
+        self._label_var = None
 
     def start(self):
-        self.label_var = StringVar()
-        self.label_var.set("0")
+        self._label_var = StringVar()
+        self._label_var.set("0")
 
-        label = ttk.Label(master=self.root, textvariable=self.label_var)
-        increase_button = ttk.Button(master=self.root, text="Increase", command=self.increase)
-        decrease_button = ttk.Button(master=self.root, text="Decrease", command=self.decrease)
+        label = ttk.Label(master=self._root, textvariable=self._label_var)
+
+        increase_button = ttk.Button(
+            master=self._root,
+            text="Increase",
+            command=self._increase
+        )
+
+        decrease_button = ttk.Button(
+            master=self._root,
+            text="Decrease",
+            command=self._decrease
+        )
 
         increase_button.grid(row=0, column=0)
         label.grid(row=0, column=1)
         decrease_button.grid(row=0, column=2)
+    
+    def _increase(self):
+        value = self.l_abel_var.get()
+        increased_value = str(int(value) + 1)
+
+        self._label_var.set(increased_value)
+
+    def _decrease(self):
+        value = self._label_var.get()
+        decreased_value = str(int(value) - 1)
+
+        self._label_var.set(decreased_value)
 
 window = Tk()
 window.title("TkInter example")

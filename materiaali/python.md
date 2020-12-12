@@ -27,61 +27,60 @@ KOMENNOT = {
 
 class Numerotiedustelu:
     def __init__(self):
-        self.lue = input
-        self.tulosta = print
-        self.palvelu = NumeroJaOsoitePalvelu()
+        self._lue = input
+        self._tulosta = print
+        self._palvelu = NumeroJaOsoitePalvelu()
 
     def kaynnista(self):
-        self.tulosta("numerotiedustelu")
-        self.tulosta_ohje()
+        self._tulosta("numerotiedustelu")
+        self._tulosta_ohje()
 
         while True:
-            self.tulosta("")
-            komento = self.lue("komento: ")
+            komento = self._lue("komento: ")
 
             if not komento in KOMENNOT:
-                self.tulosta("virheellinen komento")
-                self.tulosta_ohje()
+                self._tulosta("virheellinen komento")
+                self._tulosta_ohje()
                 continue
 
             if komento == "x":
                 break
             elif komento == "1":
-                self.lisaa_numero()
+                self._lisaa_numero()
             elif komento == "2":
-                self.hae_numerot()
+                self._hae_numerot()
             elif komento == "3":
-                self.hae_henkilo()
+                self._hae_henkilo()
             elif komento == "4":
-                self.lisaa_osoite()
+                self._lisaa_osoite()
             elif komento == "5":
-                self.hae_tiedot()
+                self._hae_tiedot()
             elif komento == "6":
-                self.poista_henkilo()
+                self._poista_henkilo()
             elif komento == "7":
-                self.listaus()
+                self._listaus()
 
-    def hae_numerot(self):
-        nimi = self.tulosta("kenen: ")
-        numerot = self.palvelu.hae_numerot(nimi)
+    def _hae_numerot(self):
+        nimi = self._tulosta("kenen: ")
+        numerot = self._palvelu.hae_numerot(nimi)
 
         if len(numerot) == 0:
-            self.tulosta("ei löytynyt")
+            self._tulosta("ei löytynyt")
             return
 
         for numero in numerot:
-            self.tulosta(numero)
+            self._tulosta(numero)
 
-    def lisaa_numero(self):
-        nimi = self.lue("kenelle: ")
-        numero = self.lue("numero: ")
+    def _lisaa_numero(self):
+        nimi = self._lue("kenelle: ")
+        numero = self._lue("numero: ")
 
-        self.palvelu.lisaa_numero(nimi, numero)
+        self.palvelu._lisaa_numero(nimi, numero)
 
     # lisää käyttöliittymäfunktioita...
 ```
 
-Käytössäolevat komennot on tallennettu `KOMENNOT`-nimiseen [dictionaryyn](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), jonka avaimina toimivat komentojen nimet ja arvoina niiden kuvaukset. Käyttöliittymää varten on toteutettu `Numerotiedustelu`-luokka. Luokan konstruktori alustaa oliomuuttujat `lue`, `tulosta` ja `palvelu`. Metodit `lue` ja `tulosta` tallennetaan viittaukset tuttuihin [print](https://docs.python.org/3/library/functions.html#print)- ja [input](https://docs.python.org/3/library/functions.html#input)-funktioihin. Metodiin `palvelu` sen sijaan tallenetaan `NumeroJaOsoitePalvelu`-luokan olio, jonka avulla voimme tehdä puhelinnumeroihin liittyviä operaatioita. Luokan käyttö on tapa erottaa sovelluslogiikka käyttöliittymästä, joka on periaatteena erittäin tärkeä.
+Käytössäolevat komennot on tallennettu `KOMENNOT`-nimiseen [dictionaryyn](https://docs.python.org/3/tutorial/datastructures.html#dictionaries), jonka avaimina toimivat komentojen nimet ja arvoina niiden kuvaukset. Käyttöliittymää varten on toteutettu `Numerotiedustelu`-luokka. Luokan konstruktori alustaa oliomuuttujat `lue`, `tulosta` ja `palvelu`. Attribuutteihin `lue` ja `tulosta` tallennetaan viittaukset tuttuihin [print](https://docs.python.org/3/library/functions.html#print)- ja [input](https://docs.python.org/3/library/functions.html#input)-funktioihin. Attribuuttiin `palvelu` sen sijaan tallenetaan `NumeroJaOsoitePalvelu`-luokan olio, jonka avulla voimme tehdä puhelinnumeroihin liittyviä operaatioita. Luokan käyttö on tapa erottaa sovelluslogiikka käyttöliittymästä, joka on periaatteena erittäin tärkeä.
 
 `Numerotiedustelu`-luokan `kaynnista`-metodi käynnistää käyttöliittymän. Metodi `tulosta_ohje` tulostaa käyttäjälle käytössäolevat komennot. Tämän jälkeen käyttäjältä aletaan pyytää komentoja `while True`-silmukassa.
 
@@ -90,18 +89,18 @@ Jos komentojen määrä kasvaa, voi harkita esimerkiksi [Command](https://en.wik
 ```python
 class LisaaNumeroKomento:
     def __init__():
-        self.lue = input
-        self.tulosta = print
-        self.palvelu = NumeroJaOsoitePalvelu()
+        self._lue = input
+        self._tulosta = print
+        self._palvelu = NumeroJaOsoitePalvelu()
 
     def tulosta_ohje():
         return "1 lisää numero"
 
     def suorita():
-        nimi = self.lue("kenelle: ")
-        numero = self.lue("numero: ")
+        nimi = self._lue("kenelle: ")
+        numero = self._lue("numero: ")
 
-        self.palvelu.lisaa_numero(nimi, numero)
+        self._palvelu.lisaa_numero(nimi, numero)
 ```
 
 Kaikilla komentoluokilla on siis metodit `tulosta_ohje` ja `suorita`. Komennot voi tallentaa dictionaryyn `Numerotiedustelu`-luokan konstruktorissa:
@@ -109,10 +108,10 @@ Kaikilla komentoluokilla on siis metodit `tulosta_ohje` ja `suorita`. Komennot v
 ```python
 class Numerotiedustelu:
     def __init__(self):
-        self.lue = input
-        self.tulosta = print
+        self._lue = input
+        self._tulosta = print
 
-        self.komennot = {
+        self._komennot = {
             "x": LopetaKomento()
             "1": LisaaNumeroKomento()
             # ...
@@ -125,22 +124,21 @@ Tämä yksinkertaistaa `Numerotiedustelu`-luokan `kaynnista`-metodia:
 
 ```python
 def kaynnista(self):
-    self.tulosta("numerotiedustelu")
-    self.tulosta_ohje()
+    self._tulosta("numerotiedustelu")
+    self._tulosta_ohje()
 
     while True:
-        self.tulosta("")
-        komento = self.lue("komento: ")
+        komento = self._lue("komento: ")
 
         if not komento in self.komennot:
-            self.tulosta("virheellinen komento")
-            self.tulosta_ohje()
+            self._tulosta("virheellinen komento")
+            self._tulosta_ohje()
             continue
 
         if komento == "x":
             break
 
-        komento_olio = self.komennot[komento]
+        komento_olio = self._komennot[komento]
         komento_olio.suorita()
 ```
 
@@ -157,9 +155,9 @@ Edellä esitetyn `Numerotiedustelu`-luokan attribuutit `lue`, `tulosta` ja `palv
 ```python
 class Numerotiedustelu:
     def __init__(self):
-        self.lue = input
-        self.tulosta = print
-        self.palvelu = NumeroJaOsoitePalvelu()
+        self._lue = input
+        self._tulosta = print
+        self._palvelu = NumeroJaOsoitePalvelu()
 
 # ...
 ```
@@ -171,9 +169,9 @@ _Riippuvuuksien injektointi_ on ohjelmointitekniikka, jonka avulla pyritään er
 ```python
 class Numerotiedustelu:
     def __init__(lue, tulosta, palvelu):
-        self.lue = lue
-        self.tulosta = tulosta
-        self.palvelu = palvelu
+        self._lue = lue
+        self._tulosta = tulosta
+        self._palvelu = palvelu
 
     # ...
 ```
@@ -242,17 +240,38 @@ Repository-suunnittelumallin perusidea on se, että jokaisella tietokohteella (k
 ```python
 class TodoRepository:
     def __init__(self, file_path):
-        self.file_path = file_path
+        self._file_path = file_path
 
-    def ensure_file_exists(self):
-        Path(self.file_path).touch()
+    def find_all(self):
+        return self._read()
 
-    def read(self):
+    def find_by_username(self, username):
+        todos = self.find_all()
+
+        user_todos = filter(
+            lambda todo: todo.user and todo.user.username == username, todos
+        )
+
+        return list(user_todos)
+
+    def create(self, todo):
+        todos = self.find_all()
+
+        todos.append(todo)
+
+        self._write(todos)
+
+        return todo
+    
+    def _ensure_file_exists(self):
+        Path(self._file_path).touch()
+
+    def _read(self):
         todos = []
 
-        self.ensure_file_exists()
+        self._ensure_file_exists()
 
-        with open(self.file_path) as file:
+        with open(self._file_path) as file:
             for row in file:
                 row = row.replace("\n", "")
                 parts = row.split(";")
@@ -271,10 +290,10 @@ class TodoRepository:
 
         return todos
 
-    def write(self, todos):
-        self.ensure_file_exists()
+    def _write(self, todos):
+        self._ensure_file_exists()
 
-        with open(self.file_path, "w") as file:
+        with open(self._file_path, "w") as file:
             for todo in todos:
                 done_string = "1" if todo.done else "0"
                 username = todo.user.username if todo.user else ""
@@ -282,27 +301,6 @@ class TodoRepository:
                 row = f"{todo.id};{todo.content};{done_string};{username}"
 
                 file.write(row+"\n")
-
-    def find_all(self):
-        return self.read()
-
-    def find_by_username(self, username):
-        todos = self.find_all()
-
-        user_todos = filter(
-            lambda todo: todo.user and todo.user.username == username, todos
-        )
-
-        return list(user_todos)
-
-    def create(self, todo):
-        todos = self.find_all()
-
-        todos.append(todo)
-
-        self.write(todos)
-
-        return todo
 ```
 
 `TodoRepository`-luokka tarjoaa metodit tiedon lukemista varten metodit `find_all` ja `find_by_username`. Nämä metodit hakevat tietoa CSV-tiedostosta ja muodostovat sen riveistä `Todo`-luokan olioita. Tiedon kirjoittamista varten luokka tarjoaa metodin `create`.

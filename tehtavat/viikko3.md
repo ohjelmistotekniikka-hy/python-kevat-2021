@@ -71,16 +71,16 @@ Muista, että sekvenssikaaviossa tulee tulla ilmi kaikki mainin suorituksen aika
 ```python
 class Machine:
     def __init__(self):
-        self.tank = FuelTank()
-        self.tank.fill(40)
-        self.engine = Engine(self.tank)
+        self._tank = FuelTank()
+        self._tank.fill(40)
+        self._engine = Engine(self._tank)
 
     def drive(self):
-        self.engine.start()
-        running = self.engine.is_running()
+        self._engine.start()
+        running = self._engine.is_running()
 
         if running:
-          self.engine.use_energy()
+          self._engine.use_energy()
 
 class FuelTank:
     def __init__(self):
@@ -94,16 +94,16 @@ class FuelTank:
 
 class Engine:
     def __init__(self, tank):
-        self.fuel_tank = tank
+        self._fuel_tank = tank
 
     def start(self):
-        self.fuel_tank.consume(5)
+        self._fuel_tank.consume(5)
 
     def is_running(self):
-        return self.fuel_tank.fuel_contents > 0
+        return self._fuel_tank.fuel_contents > 0
 
     def use_energy(self):
-        self.fuel_tank.consume(10)
+        self._fuel_tank.consume(10)
 ```
 
 ### 4
@@ -172,14 +172,14 @@ class Lukijalaite:
 
 class HKLLaitehallinto:
     def __init__(self):
-        self.lataajat = []
-        self.lukijat = []
+        self._lataajat = []
+        self._lukijat = []
 
     def lisaa_lataaja(self, lataaja):
-        self.lataajat.append(lataaja)
+        self._lataajat.append(lataaja)
 
     def lisaa_lukija(self, lukija):
-        self.lukijat.append(lukija)
+        self._lukijat.append(lukija)
 
 def main():
     laitehallinto = HKLLaitehallinto()
@@ -200,6 +200,6 @@ def main():
     ratikka6.osta_lippu(kallen_kortti, 0)
     bussi244.osta_lippu(kallen_kortti, 2)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 ```

@@ -86,7 +86,8 @@ Dokumentaatio tuo yhteensä maksimissaan 12 pistettä, jotka jakautuvat seuraava
   - Arvostelijan tulee pystyä asentamaan ohjelma ja käyttämään sitä ohjeen avulla
 - Testausdokumentti 2p
 - Docstring-dokumentaatio 2p
-  - Suurin osa luokista, metodeista ja funktioista on dokumentoitu docstring-kommenttien avulla
+  - Suurin osa luokista, attribuuteista, metodeista ja funktioista on dokumentoitu docstring-kommenttien avulla
+  - Luokan sisäisiä (ilmaistu nimessä `_`- tai `__`-etuliitteellä) attribuutteja, tai metodeja ei tarvitse dokumentoida
 - Repositorio ja README 1p
   - Repositorion ja README:n oletetaan olevan aiempien viikkojen vaatimusten mukainen
 
