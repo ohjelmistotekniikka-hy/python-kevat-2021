@@ -1,17 +1,6 @@
-Luokkakaaviot
-
-[User|name:String;username:String|getName();getUsername()]1-*[Todo|id:int;content:String;done:boolean|getId();getContent();getUser();isDone();setDone();]
-
-[TodoService] -.-> [ToDo]
-[TodoService] 1-1 [ToDoDao]
-[TodoService] 0..1-loggedIn-1 [User]
-[User] 1-* [Todo]
-[TodoDao] 1-* [Todo]
-
-[TodoService] 1-1 [<interface> ToDoDao]
-[<interface> ToDoDao] ^-[FileToDoDao]
-[<interface> ToDoDao] ^-[SQLToDoDao]
-[<interface> ToDoDao] ^-[FakeToDoDao]
+[Kassapaate]-.->[Maksukortti]
+[Kassapaate|syo_edullisesti(kortti);syo_maukkaasti(kortti);lataa_rahaa(kortti)]
+[Maksukortti|saldo|ota_rahaa(summa);lataa_rahaa(summa)]
 
 main->*arto: Henkilo("Hellas", 1500, "1234-12345")
 main->rekisteri: lisaa(arto)
