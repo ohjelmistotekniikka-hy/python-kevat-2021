@@ -511,7 +511,7 @@ class UI:
         decrease_button.grid(row=0, column=2)
     
     def _increase(self):
-        value = self.l_abel_var.get()
+        value = self._label_var.get()
         increased_value = str(int(value) + 1)
 
         self._label_var.set(increased_value)
