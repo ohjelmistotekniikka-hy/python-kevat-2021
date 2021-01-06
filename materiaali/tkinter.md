@@ -260,7 +260,7 @@ class UI:
         self._entry = ttk.Entry(master=self._root)
         button = ttk.Button(master=self._root, text="Button")
 
-        entry.grid(row=0, column=0)
+        self._entry.grid(row=0, column=0)
         button.grid(row=1, column=0)
 
 window = Tk()
@@ -289,7 +289,7 @@ class UI:
           command=self._handle_button_click
         )
 
-        entry.grid(row=0, column=0)
+        self._entry.grid(row=0, column=0)
         button.grid(row=1, column=0)
     
     def _handle_button_click(self):
