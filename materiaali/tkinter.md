@@ -332,10 +332,10 @@ class HelloView:
         self._initialize()
 
     def pack(self):
-        self.frame.pack(fill=constants.X)
+        self._frame.pack(fill=constants.X)
 
     def destroy(self):
-        self.frame.destroy()
+        self._frame.destroy()
     
     def _initialize(self):
         self._frame = ttk.Frame(master=self._root)
