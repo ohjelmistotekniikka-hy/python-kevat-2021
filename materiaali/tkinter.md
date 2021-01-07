@@ -537,4 +537,4 @@ Toinen yleinen käyttökohde muuttujaluokille on [CheckButton](http://effbot.org
 
 ## Lisäluettavaa
 
-[An Introduction to Tkinter](http://effbot.org/tkinterbook/)-dokumentaatio sisältää mm. yleisiä TkInter-ohjeita ja esimerkkejä yksittäisien komponenttien käytöstä.
+[Python GUI Programming With Tkinter](https://realpython.com/python-gui-tkinter/)-ohje sisältää mm. yleisiä TkInter-ohjeita ja esimerkkejä yksittäisien komponenttien käytöstä.
