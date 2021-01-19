@@ -356,7 +356,7 @@ def get_database_connection():
     return connection
 ```
 
-Ennen tietokantaulujen alustusta kannattaa entiset tietokantaulut poistaa. Näin esimerkiksi uuden sarakkeen lisääminen tauluun onnistuu helposti. Tietokannan alustustoimenpiteitä varten kannattaa toteuttaa oma moduulinsa esimerkiksi <i>src/initiailize_database.py</i> tiedostoon:
+Ennen tietokantaulujen alustusta kannattaa entiset tietokantaulut poistaa. Näin esimerkiksi uuden sarakkeen lisääminen tauluun onnistuu helposti. Tietokannan alustustoimenpiteitä varten kannattaa toteuttaa oma moduulinsa esimerkiksi <i>src/initialize_database.py</i> tiedostoon:
 
 ```python
 from database_connection import get_database_connection
