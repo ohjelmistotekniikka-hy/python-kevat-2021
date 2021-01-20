@@ -5,6 +5,7 @@ Eräs tapa julkaista ohjelmasta stabiili versio on tehdä GitHubiin release, eli
 - Klikkaa repositorion GitHub-sivulta kohtaa "0 releases"
 - Valitse _Draft a new release_
 - Määrittele julkaisun tiedot
+  - Käytä tagina palautuksen viikkoa. Esimerkiksi viikon 5 palautuksessa tagina on "viikko5"
 - Jos sovelluksen suorituksessa edellytetään tiedostoja, tai jonkin erityisen komennon suorittamista, voit mainita niistä tekstissä. Kaikki asennukseen vaadittavat toimenpiteet tulee kuitenkin mainita myös _README.md_-tiedostossa
 - GitHub liittää automaattisesti projektin lähdekoodin zip-pakattuna releaseen
 
