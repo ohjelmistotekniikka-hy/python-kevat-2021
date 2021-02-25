@@ -16,7 +16,7 @@ poetry install pygame
 
 Pelin sovelluslogiikan suunnittelussa kannattaa lähteä liikkeellä miettimillä, mitä asioita peliin liittyy. Yleensä peleissä käsitellään paljon objekteja, joita voidaan mallintaa kaksiulotteisissa peleissä esimerkiksi suorakulmioilla, joilla on x- ja y-koordinaatit, sekä leveys- ja korkeus-arvo. Moni pelien sovellesloogiikkaan liittyvä toiminallisuus liittyy siihen, mitkä pelin objektit leikkaavat toisiaan, eli selkokielellä "törmäävät" toisiinsa. Tästä hyvänä esimerkkinä se, ettei pelihahmo yleensä pysty kävelemään seinän läpi.
 
-Tämän kaltaisia objekteja, voi mallintaa esimerkiksi seuraavan laisella `GameObject`-luokalla:
+Tämän kaltaisia objekteja, voi mallintaa esimerkiksi seuraavanlaisella `GameObject`-luokalla:
 
 ```python
 class GameObject:
@@ -31,13 +31,10 @@ class GameObject:
         self.y = self.y + dy
 
     def intersects(self, game_object):
-        horizontal_intersection = self.x >= game_object.x and self.x < game_object.x + game_object.width
-        vertical_intersection = self.y >= game_object.y and self.y < game_object.y + game_object.height
-
-        return horizontal_intersection and vertical_intersection
+        return (self.x < game_object.x + game_object.width) and (self.x + game_object.width > game_object.x) and (self.y < game_object.y + game_object.height) and (self.y + self.height > game_object.y)
 ```
 
-`GameObject`-olio mallintaa siis suorakulmiota. Objektia voi liikuttaa kutsumalla `move`-metodia ja `intersects`-metodia voi kutsua tarkastaakseen leikkaako objekti jotain toista objektia.
+`GameObject`-olio mallintaa siis suorakulmiota. Objektia voi liikuttaa kutsumalla `move`-metodia. Metodia `intersects` voi kutsua tarkastaakseen leikkaako objekti jotain toista objektia.
 
 Sokoban-pelissä erilaisia objekteja ovat:
 
@@ -168,7 +165,7 @@ class TestLevel(unittest.TestCase):
 
 Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkastus, ettei robotti pysty kulkemaan seinien läpi. Tällä toiminallisuudella voisi jälleen toteuttaa testin, jonka jälkeen voisi siirtymään toteuttamaan sovelluslogiikkaan seuraavaa toiminallisuutta.
 
-## Sovelluslogiikan 
+## Sovelluslogiikan
 
 Kun sovelluslogiikan toteutus on edennyt hieman pidemmälle voi siirtyä jo miettimään, miten pelin objekteja piirtäisi näytölle. Perusideana on, että käyttöliittymään liittyvän koodin tarkoituksena on ainoastaan esittää pelin tila visuaalisesti, eikä tehdä sovelluslogiikkaan liittyviä toimintoja, kuten objektien liikuttamista.
 
@@ -276,6 +273,7 @@ class PygameRenderer:
 
 ```python
 from level import Level
+from pygame_renderer import PygameRenderer
 
 
 def main():
@@ -297,6 +295,8 @@ def main():
     level = Level(level_map)
     renderer = PygameRenderer(display, scale, level)
 
+    pygame.init()
+    renderer.render_display()
 
 if __name__ == "__main__":
     main()
@@ -304,3 +304,169 @@ if __name__ == "__main__":
 
 ## Pelaajan syötteet
 
+Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "Game loop". Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen luokan avulla:
+
+```python
+import pygame
+
+
+class GameLogic:
+    def __init__(self, level, renderer):
+        self._level = level
+        self._renderer = renderer
+
+    def start_game_loop(self):
+        while True:
+            if self._handle_events() == False:
+                break
+
+            self._render()
+
+            if self._level.is_completed():
+                break
+
+    def _handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self._level.move_robot(dx=-1)
+                if event.key == pygame.K_RIGHT:
+                    self._level.move_robot(dx=1)
+                if event.key == pygame.K_UP:
+                    self._level.move_robot(dy=-1)
+                if event.key == pygame.K_DOWN:
+                    self._level.move_robot(dy=1)
+            elif event.type == pygame.QUIT:
+                return False
+
+    def _render(self):
+        self._renderer.render_display()
+```
+
+`GameLogic`-luokkalle injektoidaan konstruktorin kautta riippuvuuksina `Level`- ja `PygameRender`-luokan oliot. Riippuvuuksien injektointi helpottaa mm. luokan testaamista. Luokan `start_game_loop` käynnistää ikuisen loopin, joka katkeaa kun `handle_events`-metodi palauttaa arvon `False`, tai pelin taso on läpäisty, jonka kertoo `Level`-luokan metodi `is_completed`. Luokan metodi `handle_events` lukee tapahtumia Pygamen event loopista ja muokkaa sen perusteella pelin tilaa liikuttamalla robottia nuolinäppäimien painalluksen perusteella.
+
+`GameLogic`-luokan testaamista hankaloittaa vielä riippuvuus Pygamen event looppiin `handle_events`-metodissa. Ongelman voi ratkaista toteuttamalla yksinkertaisen `PygameEventLoop`-luokan:
+
+```python
+import pygame
+
+class PygameEventLoop:
+    def get_event(self):
+        return pygame.event.get()
+```
+
+Luokan olion voi antaa `GameLogic`-luokalle konstruktorin kautta:
+
+```python
+class GameLogic:
+    def __init__(self, level, renderer, event_loop):
+        self._level = level
+        self._renderer = renderer
+        self._event_loop = event_loop
+
+    # ...
+```
+
+Ja käyttää sitä `handle_events`-metodissa:
+
+```python
+def _handle_events(self):
+    for event in self._event_loop.get_event():
+        # ...
+```
+
+`GameLogic`-luokan käyttö onnistuu nyt seuraavasti:
+
+```python
+from level import Level
+from pygame_renderer import PygameRenderer
+from pygame_event_loop import PygameEventLoop
+from game_logic import GameLogic
+
+def main():
+    # kuvien koko pikseleissä
+    scale = 50
+    level_map = [[1, 1, 1, 1, 1],
+                 [1, 0, 0, 0, 1],
+                 [1, 2, 3, 4, 1],
+                 [1, 1, 1, 1, 1]]
+
+    height = len(level_map)
+    width = len(level_map[0])
+    display_height = height * scale
+    display_width = width * scale
+    display = pygame.display.set_mode((display_width, display_height))
+
+    pygame.display.set_caption("Sokoban")
+
+    level = Level(level_map)
+    renderer = PygameRenderer(display, scale, level)
+    event_loop = PygameEventLoop()
+    game_logic = GameLogic(level, renderer, event_loop)
+
+    pygame.init()
+    game_logic.start_game_loop()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+Luokan testaaminen on mahdollista hyödyntämällä `GameLogic`-luokan riippuvuuksissa valekomponentteja:
+
+```python
+import unittest
+import pygame
+
+from level import Level
+from game_logic import GameLogic
+
+class StubEvent:
+    def __init__(self, event_type, key):
+        self.type = event_type
+        self.key = key
+
+
+class StubEventLoop:
+    def __init__(self, events):
+        self._events = events
+
+    def get_event(self):
+        return self._events
+
+
+class StubRenderer:
+    def render_display(self):
+        pass
+
+
+LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
+               [1, 0, 0, 0, 1],
+               [1, 2, 3, 4, 1],
+               [1, 1, 1, 1, 1]]
+
+
+class TestGameLogic(unittest.TestCase):
+    def setUp(self):
+        self.level_1 = Level(LEVEL_MAP_1)
+
+    def assert_coordinates_equal(self, game_object, x, y):
+        self.assertEqual(game_object.x, x)
+        self.assertEqual(game_object.y, y)
+
+    def test_can_complete_level(self):
+        events = [
+          StubEvent(pygame.KEYDOWN, pygame.K_LEFT),
+        ]
+
+
+        game_logic = GameLogic(
+            self.level_1,
+            StubRenderer(),
+            StubEventLoop(events)
+        )
+
+        game_logic.start_game_loop()
+
+        self.assertTrue(self.level_1.is_completed())
+```
