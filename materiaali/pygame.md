@@ -2,8 +2,6 @@
 
 Kuten kurssilla on jo todettu, sovelluslogiikan ja käyttöliittymän erottaminen toisistaan muodostuu erittäin tärkeäksi ohjelmiston testattavuuden ja laajennettavuuden kannalta. Etenkin pelien kohdalla, on toteutuksessa helppo sortua ajatukseen, että kehitystä kannattaa tehdä käyttöliittymä edellä. Tämä johtaa helposti "spagettikoodiin", jossa käyttöliittymän ja sovelluslogiikan koodi nivoutuvat tiiviisti yhteen siten, että koodin luettavuus ja testattavuus kärsivät.
 
-Pelien toteutus [Pygame](https://www.pygame.org)-kirjastolla saattaa olla jo tuttua Ohjelmoinnin jatkokurssilta.
-
 Tutustutaan tässä osiossa vinkkeihin, miten pelien toteutusta voisi lähestyä [Pygame](https://www.pygame.org)-kirjaston avulla. Kirjasto saatta olla jo ennestään tuttu Ohjelmoinnin jatkokurssilta. Esimerkkinä osiossa käytetään yksinkertaista [Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-peliä. Samaa peliä on käytetty esimerkkinä myös Ohjelmoinnin jatkokurssilla, mutta kyseisessä esimerkissä ei keskitytty esimerkiksi pelin testaamiseen. Projektin lähdekoodi löytyy kokonaisuudessaan [tästä](https://github.com/ohjelmistotekniikka-hy/pygame-sokoban) repositoriosta.
 
 ## Pygame-kirjaston asennus Poetryn avulla
