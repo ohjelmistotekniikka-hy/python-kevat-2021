@@ -16,50 +16,52 @@ poetry install pygame
 
 Pelin sovelluslogiikan suunnittelussa kannattaa lähteä liikkeellä miettimillä, mitä asioita peliin liittyy. Yleensä peleissä käsitellään paljon objekteja, joita voidaan mallintaa kaksiulotteisissa peleissä esimerkiksi suorakulmioilla, joilla on x- ja y-koordinaatit, sekä leveys- ja korkeus-arvo. Moni pelien sovellesloogiikkaan liittyvä toiminallisuus liittyy siihen, mitkä pelin objektit leikkaavat toisiaan, eli selkokielellä "törmäävät" toisiinsa. Tästä hyvänä esimerkkinä se, ettei pelihahmo yleensä pysty kävelemään seinän läpi.
 
-Tämän kaltaisia objekteja, voi mallintaa esimerkiksi seuraavanlaisella `GameObject`-luokalla:
-
-```python
-class GameObject:
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-
-    def move(self, dx=0, dy=0):
-        self.x = self.x + dx
-        self.y = self.y + dy
-
-    def intersects(self, game_object):
-        return (self.x < game_object.x + game_object.width) and (self.x + game_object.width > game_object.x) and (self.y < game_object.y + game_object.height) and (self.y + self.height > game_object.y)
-```
-
-`GameObject`-olio mallintaa siis suorakulmiota. Objektia voi liikuttaa kutsumalla `move`-metodia. Metodia `intersects` voi kutsua tarkastaakseen leikkaako objekti jotain toista objektia.
-
 Sokoban-pelissä erilaisia objekteja ovat:
 
 - _Robotti_, joka toimii pelihahmona. Pelihahmo voi liikkua lattialla ja siirtää laatikoita, jos ne eivät törmää seinään tai toiseen laatikkoon
-- _Seinä_, joka rajaa peli kentän. Mikään muu objekti ei voi mennä seinän läpi
+- _Seinä_, joka rajaa peli kentän. Mikään muu objekti ei voi liikkua seinän läpi
 - _Lattia_, jonka päällä robotti voi kävellä
 - _Laatikko_, jota robotti voi siirtää, jos se ei törmää seinään tai muihin laatikoihin
 - _Kohde_, johon laatikko pitäisi siirtää
 
-Kaikkia näitä objekteja mallinnetaan suorakulmioina, joten niille voi antaa `GameObject`-olion konstruktorin kautta. Esimerkiksi `Robot`-luokassa se tapahtuisi seuraavasti:
+Pygamessa pelin objekteja mallinnetaan usein luokilla, jotka perivät [Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite)-luokan. Peliohjelmoinnin yhteydessä [sprite](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>)-termillä tarkoitetaan kaksiulotteisia kuvia, joita käytetään usein antamaan pelin objekteille niiden visuaaliainen ilme. `Sprite`-luokka tarjoaa visuaalisen ilmeen lisäksi myös muita hyödyllisiä toiminallisuuksia, kuten mahdollisuuden tarkistaa törmääkö tietty `Sprite`-olio joidenkin muiden `Sprite`-olioiden kanssa.
+
+Sokoban-pelissä pelattavan hahmon `Robot`-luokka näyttää seuraavalta:
 
 ```python
-class Robot:
-    def __init__(self, game_object):
-        self.game_object = game_object
+import pygame
+import os
+
+# polku tämän tiedoston hakemistoon
+dirname = os.path.dirname(__file__)
+
+# Peritään Sprite-luokka
+class Robot(pygame.sprite.Sprite):
+    def __init__(self, x=0, y=0):
+        # kutsutaan yläluokan konstruktoria
+        super().__init__()
+
+        # muodostetaan polku tiedoston hakemistosta hakemistoon, jossa kuva sijaitsee
+        self.image = pygame.image.load(
+            os.path.join(dirname, 'assets', 'robot.png')
+        )
+
+        # määritellään objektin ulottuvuudet. Tässä tapauksessa muodostetaan suorakulmia kuvan koon perusteella (50x50)
+        self.rect = self.image.get_rect()
+
+        # asetetaan alustavat x- ja y-koordinaatin arvot konstruktorin argumenttien perusteella
+        self.rect.x = x
+        self.rect.y = y
 ```
 
-Huomaa, että `Robot`-oliolla voisi hyvin olla myös muita attribuutteja. Vaihtoehtoisesti `Robot`-luokka voisi periä `GameObject`-luokan, mutta lähtökohtaisesti kannattaa suosia [luokkien yhdistelemistä perinnän sijaan](https://en.wikipedia.org/wiki/Composition_over_inheritance).
+Luokan `image`-attribuutin arvoksi tulee asettaa kuva, joka piirretään näytölle. Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla sen `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella.
 
 ## Pelin tilan hallinta
 
-Objektien tilan ylläpitäminen, esimerkiksi niiden siirtely, on yksi sovelluslogiikan olennaisimmista ominaisuuksista. Tähän käyttöturkeen sopisi Sokoban-pelissä esimerkiksi luokka nimeltä `Level`:
+Pelin objektien tilan hallinta, kuten tieto, missä koordinaateissa objektit sijaitsevat, on yksi sovelluslogiikan tärkeimmistä vastuualueista. Kun sovelluslogiikka on toteuttu, on pelinäkymän piirtäminen kohtalaisen triviaali vaihe. Sokoban-pelissä yksittäisen tason tilan hallinnasta vastaa `Level`-luokka:
 
 ```python
-from game_object import GameObject
+fimport pygame
 from robot import Robot
 from box import Box
 from floor import Floor
@@ -68,36 +70,47 @@ from wall import Wall
 
 
 class Level:
-    def __init__(self, level_map):
+    def __init__(self, level_map, grid_size):
+        self.grid_size = grid_size
         self.robot = None
-        self.walls = []
-        self.targets = []
-        self.floors = []
-        self.boxes = []
+        self.walls = pygame.sprite.Group()
+        self.targets = pygame.sprite.Group()
+        self.floors = pygame.sprite.Group()
+        self.boxes = pygame.sprite.Group()
+        self.all_sprites = pygame.sprite.Group()
 
-        self._initialize_game_objects(level_map)
+        self._initialize_sprites(level_map)
 
-    def _initialize_game_objects(self, level_map):
+    def _initialize_sprites(self, level_map):
         height = len(level_map)
         width = len(level_map[0])
 
         for y in range(height):
             for x in range(width):
                 square = level_map[y][x]
-                game_object = GameObject(x, y, 1, 1)
+                normalized_x = x * self.grid_size
+                normalized_y = y * self.grid_size
 
                 if square == 0:
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.floors.add(Floor(normalized_x, normalized_y))
                 elif square == 1:
-                    self.walls.append(Wall(GameObject(x, y, 1, 1)))
+                    self.walls.add(Wall(normalized_x, normalized_y))
                 elif square == 2:
-                    self.targets.append(Target(GameObject(x, y, 1, 1)))
+                    self.targets.add(Target(normalized_x, normalized_y))
                 elif square == 3:
-                    self.boxes.append(Box(GameObject(x, y, 1, 1)))
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.boxes.add(Box(normalized_x, normalized_y))
+                    self.floors.add(Floor(normalized_x, normalized_y))
                 elif square == 4:
-                    self.robot = Robot(GameObject(x, y, 1, 1))
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.robot = Robot(normalized_x, normalized_y)
+                    self.floors.add(Floor(normalized_x, normalized_y))
+
+        self.all_sprites.add(
+            self.floors,
+            self.walls,
+            self.targets,
+            self.boxes,
+            self.robot
+        )
 ```
 
 `Level`-luokan tarkoitus tässä vaiheessa on muodostaa kaksiulotteisesta taulukosta pelin objekteja. Luokan olion voi muodostaa esimerkiksi seuraavasti:
@@ -105,36 +118,110 @@ class Level:
 ```python
 from level import Level
 
+LEVEL_MAP = [[1, 1, 1, 1, 1],
+             [1, 0, 0, 0, 1],
+             [1, 2, 3, 4, 1],
+             [1, 1, 1, 1, 1]]
+
+GRID_SIZE = 50
+
 
 def main():
-    level_map = [[1, 1, 1, 1, 1],
-                 [1, 0, 0, 0, 1],
-                 [1, 2, 3, 4, 1],
-                 [1, 1, 1, 1, 1]]
-
-    level = Level(level_map)
+    level = Level(LEVEL_MAP, GRID_SIZE)
 
 
 if __name__ == "__main__":
     main()
 ```
 
-Huomaa, ettei `Level`-luokka tiedä mistä kartan tiedot haetaan, joten melko pienellä vaivalla sen pystyisi lukemaan esimerkiksi CSV-tiedostosta. Lisäksi monimutkaisemmissa peleissä kartan esityismuoto on luultavasti monimutkaisempi. Esimerkiksi lukujen 0-9 sijaan käytössä voisi olla merkkijonoja, jotka kuvaavat minkälainen objekti ruudussa on.
+Luokan konstruktorin `grid_size`-argumentti kuvastaa pelin kuvien kokoa. Kun kuvien koko on 50 pikseliä, tulee esimerkiksi taulukon indeksissä `[1][2]` oleva ruutu piirtää `(x, y)`-pisteeseen `(100, 50)`.
 
-Monimutkaistetaan sovelluslogiikkaa niin, että `Level`-luokka tarjoaa metodin `move_robot` robotin liikuttamiseen:
+Pelin spritet kannttaa jaotella ryhmiin, jotka lisätään [Group](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Group)-luokan olioon. Esimerkiksi seinät on lisätty `initialize_sprites`-metodissa `walls`-attribuuttiin tallennettuun `Group`-olioon kutsumalla olion `add`-metodia seuraavasti:
+
+```python
+self.walls.add(Wall(normalized_x, normalized_y))
+```
+
+Spritejen ryhmittelyn on suuria etuja. Esimerkiksi kaikki ryhmän spritet pystyy helposti piirtämään yhdellä `draw`-metodin kutsulla ja ryhmän spritejen törmäyksen tarkastaminen jonkin toisen spriten kanssa onnistuu yhdellä [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion kutsulla.
+
+Kaikista pelin spriteistä kannattaa koostaa yksi ryhmä, joka helpottaa niiden piirtämistä. Edellisessä esimerkissä kaikki spritet tallennettiin `all_sprites`-attribuutiin:
+
+```python
+self.all_sprites.add(
+    self.floors,
+    self.walls,
+    self.targets,
+    self.boxes,
+    self.robot
+)
+```
+
+Kuten näkyy, `Group`-olioon voi lisätä `add`-metodin avulla helposti yksittäisen spriten, tai kaikki spritet jostain tietystä ryhmästä. Huomaa, että _lisäysjärjestyksellä on väliä_, sillä ensimmäisenä ryhmään lisätty sprite piirretään ensimmäisenä. Jos esimerkiksi `floors` lisättäisiin ryhmään viimeisenä, piirtyisi samoissa koordinaateissa oleva laatikko tai robotti lattian alle.
+
+Voimme nyt piirtää `Level`-olion kaikki spritet seuraavasti:
+
+```python
+import pygame
+from level import Level
+
+LEVEL_MAP = [[1, 1, 1, 1, 1],
+             [1, 0, 0, 0, 1],
+             [1, 2, 3, 4, 1],
+             [1, 1, 1, 1, 1]]
+
+GRID_SIZE = 50
+
+
+def main():
+    height = len(LEVEL_MAP)
+    width = len(LEVEL_MAP[0])
+    display_height = height * GRID_SIZE
+    display_width = width * GRID_SIZE
+    display = pygame.display.set_mode((display_width, display_height))
+
+    pygame.display.set_caption("Sokoban")
+
+    level = Level(level_map, GRID_SIZE)
+
+    pygame.init()
+
+    level.all_sprites.draw()
+
+if __name__ == "__main__":
+    main()
+```
+
+Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia `draw`, joka piirtää spritet näytölle.
+
+## Spriten siirtäminen
+
+Spritejen siirtäminen monissa peleissä yksi tärkeimmistä toiminallisuuksista. Spriten siirtäminen onnistuu muuttamalla `Sprite`-olion `rect`-olion `x`- ja `y`-attribuuttien arvoja. Esimerkiksi robotin siirtämistä varten voi toteuttaa `Level`-luokkaan seuraavanlaisen metodin:
 
 ```python
 def move_robot(self, dx=0, dy=0):
-    self.robot.game_object.move(dx, dy)
+    self.robot.rect.x += dx
+    self.robot.rect.y += dy
+```
+
+Robotin liikuttelu onnistuu nyt seuraavasti:
+
+```python
+# liikutaan ylös
+level.move_robot(dy=-50)
+# liikutaan alas
+level.move_robot(dy=50)
+# liikutaan oikealle
+level.move_robot(dx=-50)
+# liikutaan vasemmalle
+level.move_robot(dx=50)
 ```
 
 ## Sovelluslogiikan testaaminen
 
-Koodia on syntynyt jo sen verran, että alkaa olla aika tehdä sovelluslogiikalle ensimmäinen. Toteutetaan testi, joka varmistaa, että robotti voi liikkua lattialla:
+Koodia on syntynyt jo sen verran, että alkaa olla aika toteuttaa sovelluslogiikalle ensimmäinen testi. Toteutetaan testi, joka varmistaa, että robotti voi liikkua lattialla:
 
 ```python
 import unittest
-
 from level import Level
 
 LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
@@ -142,284 +229,247 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
+GRID_SIZE = 50
+
 
 class TestLevel(unittest.TestCase):
     def setUp(self):
         self.level_1 = Level(LEVEL_MAP_1)
 
-    def assert_coordinates_equal(self, game_object, x, y):
-        self.assertEqual(game_object.x, x)
-        self.assertEqual(game_object.y, y)
+    def assert_coordinates_equal(self, sprite, x, y):
+        self.assertEqual(sprite.rect.x, x)
+        self.assertEqual(sprite.rect.y, y)
 
     def test_can_move_in_floor(self):
         robot = self.level_1.robot
 
-        self.assert_coordinates_equal(robot.game_object, 3, 2)
+        self.assert_coordinates_equal(robot, 3 * GRID_SIZE, 2 * GRID_SIZE)
 
-        self.level_1.move_robot(dy=-1)
-        self.assert_coordinates_equal(robot.game_object, 3, 1)
+        self.level_1.move_robot(dy=-GRID_SIZE)
+        self.assert_coordinates_equal(robot, 3 * GRID_SIZE, GRID_SIZE)
 
-        self.level_1.move_robot(dx=-1)
-        self.assert_coordinates_equal(robot.game_object, 2, 1)
+        self.level_1.move_robot(dx=-GRID_SIZE)
+        self.assert_coordinates_equal(robot, 2 * GRID_SIZE, GRID_SIZE)
 ```
 
-Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkastus, ettei robotti pysty kulkemaan seinien läpi. Tällä toiminallisuudella voisi jälleen toteuttaa testin, jonka jälkeen voisi siirtymään toteuttamaan sovelluslogiikkaan seuraavaa toiminallisuutta.
+Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkistus, ettei robotti pysty kulkemaan seinien läpi. Tälle toiminallisuudelle voisi jälleen toteuttaa testin. Toteutusta ja testaamista kannattaa siis tehdä lyhyissä sykleissä.
 
-## Sovelluslogiikan
+## Törmäyksien tarkastaminen
 
-Kun sovelluslogiikan toteutus on edennyt hieman pidemmälle voi siirtyä jo miettimään, miten pelin objekteja piirtäisi näytölle. Perusideana on, että käyttöliittymään liittyvän koodin tarkoituksena on ainoastaan esittää pelin tila visuaalisesti, eikä tehdä sovelluslogiikkaan liittyviä toimintoja, kuten objektien liikuttamista.
+Tällä hetkellä robotti voi liikkua seinien läpi, joka on pelin logiikan vastaista. Kuten edellä mainittiin, eräs hyvä puoli spritejen ryhmittelyssä on törmäyksen tarkastaminen. Toteutetaan `Level`-luokaan luokan sisäinen metodi `robot_can_move`, joka tarkistaa, voiko robotti liikkua argumenttina annettujen arvojen verran:
 
-Käyttöliittymää varten voisi toteuttaa esimerkiksi luokan nimeltä `PygameRenderer`:
+```python
+def _robot_can_move(self, dx=0, dy=0):
+    # siirretään robotti uuteen sijaintiin
+    self.robot.rect.x += dx
+    self.robot.rect.y += dy
+
+    # tarkisteaan osuuko robotti johonkin seinään
+    colliding_walls = pygame.sprite.spritecollide(self.robot, self.walls, False)
+
+    can_move = not colliding_walls
+
+    # siirretään robotti takaisin alkuperäiseen sijaintiin
+    self.robot.rect.x -= dx
+    self.robot.rect.y -= dy
+
+    return can_move
+```
+
+Metodi ensin siirtää robottia, jonka jälkeen se tarkistaa [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion avulla osuuko jokin seinistä robottiin. Funktion viimeinen argumentti, `dokill`, on boolean-arvo, joka kertoo poistetaanko kaikkii törmänneet spritet ryhmästä. Koska emme halua näin tapahtuvan, asetamme sen arvoksi `False`. Voimme hyödyntää `robot_can_move`-metodia edellä toteutetussa `move_robot`-metodissa seuraavasti:
+
+```python
+def move_robot(self, dx=0, dy=0):
+    if not self._robot_can_move(dx, dy):
+        return
+
+    self.robot.rect.x += dx
+    self.robot.rect.y += dy
+```
+
+## Pelaajan syötteiden lukeminen
+
+Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "Game loop". Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
 
 ```python
 import pygame
-import os
-
-dirname = os.path.dirname(__file__)
 
 
-def load_image(filename):
-    return pygame.image.load(
-        os.path.join(dirname, 'assets', filename)
-    )
-
-
-class PygameRenderer:
-    def __init__(self, display, scale, level):
+class GameLoop:
+    def __init__(self, level, grid_size, display):
+        self._level = level
+        self._clock = pygame.time.Clock()
+        self._grid_size = grid_size
         self._display = display
-        self._scale = scale
-        self._level = level
-        self._images = {}
-        self._load_images()
 
-    def render_display(self):
-        self._display.fill((0, 0, 0))
-
-        for wall in self._level.walls:
-            self._render_wall(wall)
-
-        for floor in self._level.floors:
-            self._render_floor(floor)
-
-        for target in self._level.targets:
-            self._render_target(target)
-
-        for box in self._level.boxes:
-            self._render_box(box)
-
-        self._render_robot()
-
-        pygame.display.flip()
-
-    def _load_images(self):
-        self._images = {
-            "floor": load_image("floor.png"),
-            "wall": load_image("wall.png"),
-            "target": load_image("target.png"),
-            "robot": load_image("robot.png"),
-            "box": load_image("box.png"),
-            "robot_in_target": load_image("robot_in_target.png"),
-            "box_in_target": load_image("box_in_target.png"),
-        }
-
-    def _render_game_object(self, game_object, image_name):
-        self._display.blit(
-            self._images[image_name],
-            (
-                game_object.x * self._scale,
-                game_object.y * self._scale,
-            )
-        )
-
-    def _render_wall(self, wall):
-        self._render_game_object(wall.game_object, "wall")
-
-    def _render_floor(self, floor):
-        self._render_game_object(floor.game_object, "floor")
-
-    def _render_target(self, target):
-        self._render_game_object(target.game_object, "target")
-
-    def _render_robot(self):
-        targets = self._level.targets
-        robot = self._level.robot
-
-        intersecting_targets = [
-            target for target in targets if robot.game_object.intersects(target.game_object)
-        ]
-
-        if len(intersecting_targets) > 0:
-            self._render_game_object(
-                robot.game_object,
-                "robot_in_target"
-            )
-        else:
-            self._render_game_object(robot.game_object, "robot")
-
-    def _render_box(self, box):
-        targets = self._level.targets
-
-        intersecting_targets = [
-            target for target in targets if box.game_object.intersects(target.game_object)
-        ]
-
-        if len(intersecting_targets) > 0:
-            self._render_game_object(box.game_object, "box_in_target")
-        else:
-            self._render_game_object(box.game_object, "box")
-```
-
-`PygameRenderer`-luokka see konstruktorin kautta `Level`-olion ja muita tarvittavia tietoja, joita se tarvitsee objektien piirtämiseen. Huomaa, ettei luokassa ole raskasta sovelluslogiikkaa, vaan sen metodit vain piirtävät näytölle kuvia `Level`-olion tietojen perusteella. Luokkaa voi käyttää seuraavasti:
-
-```python
-from level import Level
-from pygame_renderer import PygameRenderer
-
-
-def main():
-    # kuvien koko pikseleissä
-    scale = 50
-    level_map = [[1, 1, 1, 1, 1],
-                 [1, 0, 0, 0, 1],
-                 [1, 2, 3, 4, 1],
-                 [1, 1, 1, 1, 1]]
-
-    height = len(level_map)
-    width = len(level_map[0])
-    display_height = height * scale
-    display_width = width * scale
-    display = pygame.display.set_mode((display_width, display_height))
-
-    pygame.display.set_caption("Sokoban")
-
-    level = Level(level_map)
-    renderer = PygameRenderer(display, scale, level)
-
-    pygame.init()
-    renderer.render_display()
-
-if __name__ == "__main__":
-    main()
-```
-
-## Pelaajan syötteet
-
-Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "Game loop". Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen luokan avulla:
-
-```python
-import pygame
-
-
-class GameLogic:
-    def __init__(self, level, renderer):
-        self._level = level
-        self._renderer = renderer
-
-    def start_game_loop(self):
+    def start(self):
         while True:
             if self._handle_events() == False:
                 break
 
             self._render()
 
-            if self._level.is_completed():
-                break
+            # jokaista sekunttia kohden piirretään maksimissaan 60 näkymää
+            self._clock.tick(60)
 
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self._level.move_robot(dx=-1)
+                    self._level.move_robot(dx=-self._grid_size)
                 if event.key == pygame.K_RIGHT:
-                    self._level.move_robot(dx=1)
+                    self._level.move_robot(dx=self._grid_size)
                 if event.key == pygame.K_UP:
-                    self._level.move_robot(dy=-1)
+                    self._level.move_robot(dy=-self._grid_size)
                 if event.key == pygame.K_DOWN:
-                    self._level.move_robot(dy=1)
+                    self._level.move_robot(dy=self._grid_size)
             elif event.type == pygame.QUIT:
                 return False
 
     def _render(self):
-        self._renderer.render_display()
+        self._level.all_sprites.draw(self._display)
+
+        pygame.display.update()
 ```
 
-`GameLogic`-luokkalle injektoidaan konstruktorin kautta riippuvuuksina `Level`- ja `PygameRender`-luokan oliot. Riippuvuuksien injektointi helpottaa mm. luokan testaamista. Luokan `start_game_loop` käynnistää ikuisen loopin, joka katkeaa kun `handle_events`-metodi palauttaa arvon `False`, tai pelin taso on läpäisty, jonka kertoo `Level`-luokan metodi `is_completed`. Luokan metodi `handle_events` lukee tapahtumia Pygamen event loopista ja muokkaa sen perusteella pelin tilaa liikuttamalla robottia nuolinäppäimien painalluksen perusteella.
+Luokan metodi `start` käynnistää ikuisen loopin. Loopin sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-loopissa tapahtumia Pygamen tapahtumaloopista. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Loopin viimeinen rivi, `self._clock.tick(60)`, rajoittaa näkymien piirtämiseen 60 sekunnissa. Rivi on erityisen tärkeä, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
 
-`GameLogic`-luokan testaamista hankaloittaa vielä riippuvuus Pygamen event looppiin `handle_events`-metodissa. Ongelman voi ratkaista toteuttamalla yksinkertaisen `PygameEventLoop`-luokan:
+Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittaa riippuvuudet Pygamen tapahtumalooppiin, näytön piirtämiseen ja ajastuksiin. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Voimme toteuttaa riippuvuuksille yksinkertaiset abstraktiot.
+
+Pygamen tapahtumaloopin voi toteuttaa `EventLoop`-luokka:
 
 ```python
 import pygame
 
-class PygameEventLoop:
-    def get_event(self):
+class EventLoop:
+    def get(self):
         return pygame.event.get()
 ```
 
-Luokan olion voi antaa `GameLogic`-luokalle konstruktorin kautta:
+Näkymän piirtämisestä voi vastata `Renderer`-luokka:
 
 ```python
-class GameLogic:
-    def __init__(self, level, renderer, event_loop):
+import pygame
+
+
+class Renderer:
+    def __init__(self, display, level):
+        self._display = display
+        self._level = level
+
+    def render(self):
+        self._level.all_sprites.draw(self._display)
+
+        pygame.display.update()
+```
+
+Ja vastuun ajastuksista voi ottaa `Clock`-luokka:
+
+```python
+import pygame
+
+class Clock:
+    def __init__(self):
+        self._clock = pygame.time.Clock()
+
+    def tick(self, fps):
+        self._clock.tick(fps)
+```
+
+Nyt voimme injektoida riippuvuudet `GameLoop`-luokkaan sen konstruktorin kautta ja hyödyntää niitä luokan metodeissa:
+
+```python
+import pygame
+
+class GameLoop:
+    def __init__(self, level, renderer, event_loop, clock, grid_size):
         self._level = level
         self._renderer = renderer
         self._event_loop = event_loop
+        self._clock = clock
+        self._grid_size = grid_size
 
-    # ...
+    def start(self):
+        while True:
+            if self._handle_events() == False:
+                break
+
+            self._render()
+
+            self._clock.tick(60)
+
+    def _handle_events(self):
+        for event in self._event_loop.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self._level.move_robot(dx=-self._grid_size)
+                if event.key == pygame.K_RIGHT:
+                    self._level.move_robot(dx=self._grid_size)
+                if event.key == pygame.K_UP:
+                    self._level.move_robot(dy=-self._grid_size)
+                if event.key == pygame.K_DOWN:
+                    self._level.move_robot(dy=self._grid_size)
+            elif event.type == pygame.QUIT:
+                return False
+
+    def _render(self):
+        self._renderer.render()
 ```
 
-Ja käyttää sitä `handle_events`-metodissa:
+Luokan käyttö onnistuu seuraavasti:
 
 ```python
-def _handle_events(self):
-    for event in self._event_loop.get_event():
-        # ...
-```
-
-`GameLogic`-luokan käyttö onnistuu nyt seuraavasti:
-
-```python
+import pygame
 from level import Level
-from pygame_renderer import PygameRenderer
-from pygame_event_loop import PygameEventLoop
-from game_logic import GameLogic
+from game_loop import GameLoop
+from event_loop import EventLoop
+from renderer import Renderer
+from clock import Clock
+
+LEVEL_MAP = [[1, 1, 1, 1, 1],
+             [1, 0, 0, 0, 1],
+             [1, 2, 3, 4, 1],
+             [1, 1, 1, 1, 1]]
+
+GRID_SIZE = 50
 
 def main():
-    # kuvien koko pikseleissä
-    scale = 50
-    level_map = [[1, 1, 1, 1, 1],
-                 [1, 0, 0, 0, 1],
-                 [1, 2, 3, 4, 1],
-                 [1, 1, 1, 1, 1]]
-
-    height = len(level_map)
-    width = len(level_map[0])
-    display_height = height * scale
-    display_width = width * scale
+    height = len(LEVEL_MAP)
+    width = len(LEVEL_MAP[0])
+    display_height = height * GRID_SIZE
+    display_width = width * GRID_SIZE
     display = pygame.display.set_mode((display_width, display_height))
 
     pygame.display.set_caption("Sokoban")
 
-    level = Level(level_map)
-    renderer = PygameRenderer(display, scale, level)
-    event_loop = PygameEventLoop()
-    game_logic = GameLogic(level, renderer, event_loop)
+    level = Level(LEVEL_MAP, GRID_SIZE)
+    event_loop = EventLoop()
+    renderer = Renderer(display, level)
+    clock = Clock()
+    game_loop = GameLoop(level, renderer, event_loop, clock, GRID_SIZE)
 
     pygame.init()
-    game_logic.start_game_loop()
+    game_loop.start()
 
 
 if __name__ == "__main__":
     main()
 ```
 
-Luokan testaaminen on mahdollista hyödyntämällä `GameLogic`-luokan riippuvuuksissa valekomponentteja:
+`GameLoop`-luokan testaaminen onnistuu hyödyntämällä valeluokkia:
 
 ```python
 import unittest
 import pygame
 
 from level import Level
-from game_logic import GameLogic
+from game_loop import GameLoop
+
+
+class StubClock:
+    def tick(self, fps):
+        pass
+
 
 class StubEvent:
     def __init__(self, event_type, key):
@@ -431,12 +481,12 @@ class StubEventLoop:
     def __init__(self, events):
         self._events = events
 
-    def get_event(self):
+    def get(self):
         return self._events
 
 
 class StubRenderer:
-    def render_display(self):
+    def render(self):
         pass
 
 
@@ -445,28 +495,29 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
+GRID_SIZE = 50
 
-class TestGameLogic(unittest.TestCase):
+
+class TestGameLoop(unittest.TestCase):
     def setUp(self):
-        self.level_1 = Level(LEVEL_MAP_1)
-
-    def assert_coordinates_equal(self, game_object, x, y):
-        self.assertEqual(game_object.x, x)
-        self.assertEqual(game_object.y, y)
+        self.level_1 = Level(LEVEL_MAP_1, GRID_SIZE)
 
     def test_can_complete_level(self):
         events = [
-          StubEvent(pygame.KEYDOWN, pygame.K_LEFT),
+            StubEvent(pygame.KEYDOWN, pygame.K_LEFT),
         ]
 
-
-        game_logic = GameLogic(
+        game_loop = GameLoop(
             self.level_1,
             StubRenderer(),
-            StubEventLoop(events)
+            StubEventLoop(events),
+            StubClock(),
+            GRID_SIZE
         )
 
-        game_logic.start_game_loop()
+        game_loop.start()
 
         self.assertTrue(self.level_1.is_completed())
 ```
+
+Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. 
