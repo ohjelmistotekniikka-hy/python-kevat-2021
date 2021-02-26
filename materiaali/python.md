@@ -145,7 +145,11 @@ def kaynnista(self):
 
 Graafinen käyttöliittymä eroaa tekstikäyttöliittymästä siinä, että komentoriviltä annettavien tekstimuotoisten komentojen sijaan käyttäjä voi antaa sovellukselle syötteitä erilaisten graafisten komponenttien kautta. Tämä voi tarkoittaa esimerkiksi tekstikenttiin kirjoittamista, tai painikkeiden painelua.
 
-[TkInter](https://wiki.python.org/moin/TkInter)-kirjasto on Pythonissa jo standardiksi muodostonut tapa toteuttaa graaffisia käyttöliittymä. Koska aihe on jonkin verran tekstikäyttöliittymä laajempi, on sille kirjoitettu oma [ohjeensa](./tkinter.md).
+[TkInter](https://wiki.python.org/moin/TkInter)-kirjasto on Pythonissa jo standardiksi muodostonut tapa toteuttaa graaffisia käyttöliittymä. Koska aihe on jonkin verran tekstikäyttöliittymä laajempi, on sille kirjoitettu erillinen [ohje](./tkinter.md).
+
+## Pelien toteutus
+
+Pelien toteutukseen soveltuvat kirjastot vaihtelevat tapauskohtaisesti. Erityisesti graafisten pelien toteutuksessa eräs hyväksi todettu kirjasto on [Pygame](https://www.pygame.org). Kirjaston käyttöön on kirjoittu erillinen, joka on luettavissa [täällä](./pygame.md).
 
 ## Riippuvuuksien injektointi
 

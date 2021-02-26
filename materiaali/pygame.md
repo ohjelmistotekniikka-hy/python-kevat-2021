@@ -1,8 +1,10 @@
 # Vinkkejä pelien toteutukseen
 
-Pelien toteutus [Pygame](https://www.pygame.org)-kirjastolla saattaa olla jo tuttua Ohjelmoinnin jatkokurssilta. Kuten jo moneen otteeseen on mainittu, sovelluslogiikan ja käyttöliittymän erottaminen toisistaan muodostuu erittäin tärkeäksi ohjelmiston testattavuuden ja laajennettavuuden kannalta. Etenkin pelien kohdalla on helppo sortua ajatukseen, että kehitystä kannattaa tehdä käyttöliittymä edellä. Tämä johtaa helposti spagetti-koodiin, jossa käyttöliittymän ja sovelluslogiikan koodi nivoutuvat tiiviisti yhteen siten, että koodin luettavuus ja testattavuus kärsivät.
+Kuten kurssilla on jo todettu, sovelluslogiikan ja käyttöliittymän erottaminen toisistaan muodostuu erittäin tärkeäksi ohjelmiston testattavuuden ja laajennettavuuden kannalta. Etenkin pelien kohdalla, on toteutuksessa helppo sortua ajatukseen, että kehitystä kannattaa tehdä käyttöliittymä edellä. Tämä johtaa helposti "spagettikoodiin", jossa käyttöliittymän ja sovelluslogiikan koodi nivoutuvat tiiviisti yhteen siten, että koodin luettavuus ja testattavuus kärsivät.
 
-Tutustutaan tässä osiossa vinkkeihin, miten pelien toteutusta voisi lähestyä. Esimerkkinä osiossa käytetään yksinkertaista [Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-peliä, jota on käytetty esimerkkinä myös mm. Ohjelmoinnin jatkokurssilla. Projektin lähdekoodi löytyy [tästä](https://github.com/ohjelmistotekniikka-hy/pygame-sokoban) repositoriosta.
+Pelien toteutus [Pygame](https://www.pygame.org)-kirjastolla saattaa olla jo tuttua Ohjelmoinnin jatkokurssilta.
+
+Tutustutaan tässä osiossa vinkkeihin, miten pelien toteutusta voisi lähestyä [Pygame](https://www.pygame.org)-kirjaston avulla. Kirjasto saatta olla jo ennestään tuttu Ohjelmoinnin jatkokurssilta. Esimerkkinä osiossa käytetään yksinkertaista [Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-peliä. Samaa peliä on käytetty esimerkkinä myös Ohjelmoinnin jatkokurssilla, mutta kyseisessä esimerkissä ei keskitytty esimerkiksi pelin testaamiseen. Projektin lähdekoodi löytyy kokonaisuudessaan [tästä](https://github.com/ohjelmistotekniikka-hy/pygame-sokoban) repositoriosta.
 
 ## Pygame-kirjaston asennus Poetryn avulla
 
@@ -14,7 +16,7 @@ poetry install pygame
 
 ## Sovelluslogiikan suunnitteleminen
 
-Pelin sovelluslogiikan suunnittelussa kannattaa lähteä liikkeellä miettimillä, mitä asioita peliin liittyy. Yleensä peleissä käsitellään paljon objekteja, joita voidaan mallintaa kaksiulotteisissa peleissä esimerkiksi suorakulmioilla, joilla on x- ja y-koordinaatit, sekä leveys- ja korkeus-arvo. Moni pelien sovellesloogiikkaan liittyvä toiminallisuus liittyy siihen, mitkä pelin objektit leikkaavat toisiaan, eli selkokielellä "törmäävät" toisiinsa. Tästä hyvänä esimerkkinä se, ettei pelihahmo yleensä pysty kävelemään seinän läpi.
+Järkevästi toteutettu sovelluslogiikka on pelin koko toteutuksen kulmakivi. Sen suunnittelussa kannattaa lähteä liikkeellä miettimällä, miten pelin logiikka toimii ja minkälaisia objekteja siiheen liitty. Kaksiulotteisissa peleissä pelin objekteja mallinnetaan usein suorakulmioilla, joilla on x- ja y-koordinaatti, sekä leveys- ja korkeus-arvo. Moni pelien sovellesloogiikkaan liittyvä toiminallisuus liittyy siihen, mitkä pelin objektit leikkaavat toisiaan, eli selkokielellä "törmäävät" toisiinsa. Tästä hyvänä esimerkkinä se, ettei pelihahmo yleensä pysty kävelemään seinän läpi.
 
 Sokoban-pelissä erilaisia objekteja ovat:
 
@@ -24,9 +26,9 @@ Sokoban-pelissä erilaisia objekteja ovat:
 - _Laatikko_, jota robotti voi siirtää, jos se ei törmää seinään tai muihin laatikoihin
 - _Kohde_, johon laatikko pitäisi siirtää
 
-Pygamessa pelin objekteja mallinnetaan usein luokilla, jotka perivät [Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite)-luokan. Peliohjelmoinnin yhteydessä [sprite](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>)-termillä tarkoitetaan kaksiulotteisia kuvia, joita käytetään usein antamaan pelin objekteille niiden visuaaliainen ilme. `Sprite`-luokka tarjoaa visuaalisen ilmeen lisäksi myös muita hyödyllisiä toiminallisuuksia, kuten mahdollisuuden tarkistaa törmääkö tietty `Sprite`-olio joidenkin muiden `Sprite`-olioiden kanssa.
+Pygamessa pelin objekteja mallinnetaan usein luokilla, jotka perivät [Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite)-luokan. Peliohjelmoinnin yhteydessä [sprite](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>)-termillä tarkoitetaan kaksiulotteista kuvaa, jota käytetään usein antamaan pelin objektille sen visuaaliainen ilme. `Sprite`-luokka tarjoaa visuaalisen ilmeen lisäksi myös muita hyödyllisiä toiminallisuuksia, kuten mahdollisuuden tarkistaa törmääkö tietty `Sprite`-olio joidenkin muiden `Sprite`-olioiden kanssa.
 
-Sokoban-pelissä pelattavan hahmon `Robot`-luokka näyttää seuraavalta:
+Sokoban-pelissä pelihahmon `Robot`-luokka näyttää seuraavalta:
 
 ```python
 import pygame
@@ -54,14 +56,28 @@ class Robot(pygame.sprite.Sprite):
         self.rect.y = y
 ```
 
-Luokan `image`-attribuutin arvoksi tulee asettaa kuva, joka piirretään näytölle. Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla sen `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella. Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name` ja `color`.
+Luokan `image`-attribuutin arvoksi tulee asettaa kuva, joka piirretään näytölle. Huomaa, että projektin hakemistorakenne on seuraava:
+
+```
+src/
+  assets/
+    robot.png
+    ...
+  robot.py
+  ...
+poetry.lock
+pyproject.toml
+...
+```
+
+Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla kuvan `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella. Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name` ja `color`.
 
 ## Pelin tilan hallinta
 
-Pelin objektien tilan hallinta, kuten tieto, missä koordinaateissa objektit sijaitsevat, on yksi sovelluslogiikan tärkeimmistä vastuualueista. Kun sovelluslogiikka on toteuttu, on pelinäkymän piirtäminen kohtalaisen triviaali vaihe. Sokoban-pelissä yksittäisen tason tilan hallinnasta vastaa `Level`-luokka:
+Pelin objektien tilan hallinta, kuten tieto, missä koordinaateissa objektit sijaitsevat, on yksi sovelluslogiikan tärkeimmistä vastuualueista. Kun sovelluslogiikka on toteutettu järkevästi, on pelinäkymän piirtäminen kohtalaisen triviaali vaihe (kuten tulemme pian huomaamaan). Sokoban-pelissä yksittäisen tason tilan hallinnasta vastaa `Level`-luokka:
 
 ```python
-fimport pygame
+import pygame
 from robot import Robot
 from box import Box
 from floor import Floor
@@ -113,7 +129,7 @@ class Level:
         )
 ```
 
-`Level`-luokan tarkoitus tässä vaiheessa on muodostaa kaksiulotteisesta taulukosta pelin objekteja. Luokan olion voi muodostaa esimerkiksi seuraavasti:
+`Level`-luokan tarkoitus on tässä vaiheessa muodostaa kaksiulotteisesta taulukosta taulukon arvojen mukaisia `Sprite`-olioita. Taulukon numeroarvo vastaa tietyn tyyppistä `Sprite`-olioita ja arvon indeksi sen koordinaatteja. Luokan olion voi muodostaa esimerkiksi seuraavasti:
 
 ```python
 from level import Level
@@ -136,13 +152,13 @@ if __name__ == "__main__":
 
 Luokan konstruktorin `grid_size`-argumentti kuvastaa pelin kuvien kokoa. Kun kuvien koko on 50 pikseliä, tulee esimerkiksi taulukon indeksissä `[1][2]` oleva ruutu piirtää `(x, y)`-pisteeseen `(100, 50)`.
 
-Pelin spritet kannttaa jaotella ryhmiin, jotka lisätään [Group](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Group)-luokan olioon. Esimerkiksi seinät on lisätty `initialize_sprites`-metodissa `walls`-attribuuttiin tallennettuun `Group`-olioon kutsumalla olion `add`-metodia seuraavasti:
+Pelin spritet kannttaa jaotella ryhmiin, jotka lisätään [Group](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Group)-luokan olioihin. Esimerkiksi seinät on lisätty `initialize_sprites`-metodissa `walls`-attribuuttiin tallennettuun `Group`-olioon kutsumalla olion `add`-metodia seuraavasti:
 
 ```python
 self.walls.add(Wall(normalized_x, normalized_y))
 ```
 
-Spritejen ryhmittelyn on suuria etuja. Esimerkiksi kaikki ryhmän spritet pystyy helposti piirtämään yhdellä `draw`-metodin kutsulla ja ryhmän spritejen törmäyksen tarkastaminen jonkin toisen spriten kanssa onnistuu yhdellä [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion kutsulla.
+Spritejen ryhmittelyssä on suuria etuja. Esimerkiksi kaikki ryhmän spritet pystyy helposti piirtämään yhdellä `draw`-metodin kutsulla ja ryhmän spritejen törmäyksen tarkastaminen jonkin toisen spriten kanssa onnistuu yhdellä [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion kutsulla.
 
 Kaikista pelin spriteistä kannattaa koostaa yksi ryhmä, joka helpottaa niiden piirtämistä. Edellisessä esimerkissä kaikki spritet tallennettiin `all_sprites`-attribuutiin:
 
@@ -156,7 +172,7 @@ self.all_sprites.add(
 )
 ```
 
-Kuten näkyy, `Group`-olioon voi lisätä `add`-metodin avulla helposti yksittäisen spriten, tai kaikki spritet jostain tietystä ryhmästä. Huomaa, että _lisäysjärjestyksellä on väliä_, sillä ensimmäisenä ryhmään lisätty sprite piirretään ensimmäisenä. Jos esimerkiksi `floors` lisättäisiin ryhmään viimeisenä, piirtyisi samoissa koordinaateissa oleva laatikko tai robotti lattian alle.
+Kuten näkyy, `Group`-olioon voi lisätä `add`-metodin avulla helposti yksittäisen spriten, tai kaikki spritet tietystä ryhmästä. Huomaa, että _lisäysjärjestyksellä on väliä_, sillä ensimmäisenä ryhmään lisätty sprite piirretään ensimmäisenä. Jos esimerkiksi `floors` lisättäisiin ryhmään viimeisenä, piirtyisi samoissa koordinaateissa oleva laatikko tai robotti lattian alle.
 
 Voimme nyt piirtää `Level`-olion kaikki spritet seuraavasti:
 
@@ -185,17 +201,18 @@ def main():
 
     pygame.init()
 
+    # piirretään all_sprites ryhmän spritet
     level.all_sprites.draw()
 
 if __name__ == "__main__":
     main()
 ```
 
-Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia `draw`, joka piirtää spritet näytölle.
+Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia `draw`, joka piirtää ryhmän spritet näytölle.
 
 ## Spriten siirtäminen
 
-Spritejen siirtäminen monissa peleissä yksi tärkeimmistä toiminallisuuksista. Spriten siirtäminen onnistuu muuttamalla `Sprite`-olion `rect`-olion `x`- ja `y`-attribuuttien arvoja. Esimerkiksi robotin siirtämistä varten voi toteuttaa `Level`-luokkaan seuraavanlaisen metodin:
+Spritejen siirtäminen, esimerkiksi käyttäjän syötteiden perusteeella, on monissa peleissä yksi tärkeimmistä toiminallisuuksista. Spriten siirtäminen onnistuu muuttamalla `Sprite`-olion `rect`-attribuuttiin tallennetun olion `x`- ja `y`-attribuutin arvoja. Esimerkiksi robotin siirtämistä varten voi toteuttaa `Level`-luokkaan seuraavanlaisen metodin:
 
 ```python
 def move_robot(self, dx=0, dy=0):
@@ -210,15 +227,17 @@ Robotin liikuttelu onnistuu nyt seuraavasti:
 level.move_robot(dy=-50)
 # liikutaan alas
 level.move_robot(dy=50)
-# liikutaan oikealle
-level.move_robot(dx=-50)
 # liikutaan vasemmalle
+level.move_robot(dx=-50)
+# liikutaan oikealle
 level.move_robot(dx=50)
 ```
 
 ## Sovelluslogiikan testaaminen
 
-Koodia on syntynyt jo sen verran, että alkaa olla aika toteuttaa sovelluslogiikalle ensimmäinen testi. Toteutetaan testi, joka varmistaa, että robotti voi liikkua lattialla:
+Koodia on syntynyt jo sen verran, että alkaa olla aika toteuttaa sovelluslogiikalle ensimmäinen testi. Pelien yksikkötestauksessa ei ole erityisiä eroja minkä tahansa muun tyyppisen ohjelmiston yksikkötestaamiseen nähden. Materiaalin [unittest-ohjeen](./unittest.md) pitäisi siis sisältää tarvittavat esitiedot pelien testaamisen aloittamiseen.
+
+Toteutetaan testi, joka varmistaa, että robotti voi liikkua lattialla:
 
 ```python
 import unittest
@@ -252,11 +271,11 @@ class TestLevel(unittest.TestCase):
         self.assert_coordinates_equal(robot, 2 * GRID_SIZE, GRID_SIZE)
 ```
 
-Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkistus, ettei robotti pysty kulkemaan seinien läpi. Tälle toiminallisuudelle voisi jälleen toteuttaa testin. Toteutusta ja testaamista kannattaa siis tehdä lyhyissä sykleissä.
+Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkistus, ettei robotti pysty kulkemaan seinien läpi. Tälle toiminallisuudelle voisi jälleen toteuttaa oman testinsä. Toteutusta ja testaamista kannattaa siis tehdä lyhyissä sykleissä.
 
 ## Törmäyksien tarkastaminen
 
-Tällä hetkellä robotti voi liikkua seinien läpi, joka on pelin logiikan vastaista. Kuten edellä mainittiin, eräs hyvä puoli spritejen ryhmittelyssä on törmäyksen tarkastaminen. Toteutetaan `Level`-luokaan luokan sisäinen metodi `robot_can_move`, joka tarkistaa, voiko robotti liikkua argumenttina annettujen arvojen verran:
+Tällä hetkellä robotti voi liikkua seinien läpi, joka on pelin logiikan vastaista. Kuten edellä mainittiin, eräs hyvä puoli spritejen ryhmittelyssä on törmäyksen tarkastamisen helppous. Toteutetaan `Level`-luokkaan luokan sisäinen metodi `robot_can_move`, joka tarkistaa, voiko robotti liikkua argumentteina annettujen arvojen verran:
 
 ```python
 def _robot_can_move(self, dx=0, dy=0):
@@ -276,7 +295,9 @@ def _robot_can_move(self, dx=0, dy=0):
     return can_move
 ```
 
-Metodi ensin siirtää robottia, jonka jälkeen se tarkistaa [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion avulla osuuko jokin seinistä robottiin. Funktion viimeinen argumentti, `dokill`, on boolean-arvo, joka kertoo poistetaanko kaikkii törmänneet spritet ryhmästä. Koska emme halua näin tapahtuvan, asetamme sen arvoksi `False`. Voimme hyödyntää `robot_can_move`-metodia edellä toteutetussa `move_robot`-metodissa seuraavasti:
+Metodi ensin siirtää robottia, jonka jälkeen se tarkistaa [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion avulla osuuko jokin seinistä robottiin. Funktio palauttaa listan spriteja, joihin argumenttina annettu sprite törmää. Jos lista on tyhjä, törmäystä ei tapahdu. Funktion viimeinen argumentti, `dokill`, on boolean-arvo, joka kertoo poistetaanko kaikkii törmänneet spritet ryhmästä. Koska emme halua näin tapahtuvan, asetamme sen arvoksi `False`.
+
+Voimme hyödyntää `robot_can_move`-metodia edellä toteutetussa `move_robot`-metodissa seuraavasti:
 
 ```python
 def move_robot(self, dx=0, dy=0):
@@ -289,7 +310,7 @@ def move_robot(self, dx=0, dy=0):
 
 ## Pelaajan syötteiden lukeminen
 
-Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "pelilooppi" (Game loop). Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
+Peli pyörii usein ikuisen silmukan sisällä, josta käytetään nimitystä "pelisilmukka" (Game loop). Tämän silmukan sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Silmukan voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
 
 ```python
 import pygame
@@ -332,11 +353,11 @@ class GameLoop:
         pygame.display.update()
 ```
 
-Luokan metodi `start` käynnistää ikuisen loopin. Loopin sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-loopissa tapahtumia Pygamen tapahtumaloopista. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Loopin viimeinen rivi, `self._clock.tick(60)`, kutsuu [Clock](http://www.pygame.org/docs/ref/time.html#pygame.time.Clock)-luokan `tick`-metodia. Metin kutsu palauttaa ajan millisekunneissa edellisestä kutsusta. Kun metodille annetaan `framerate`-argumentti, se rajoittaa kutsujen määrän maksimissaan haluttuun lukumäärään sekunnissa. Esimerkin rivi rajoittaa siis pelin nopeuden maksimissaan 60 kierrokseen sekunnissa. Rivi on erityisen tärkeä, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
+Luokan metodi `start` käynnistää ikuisen silmukan. Silmukan sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-silmukassa tapahtumia Pygamen tapahtumasilmukasta. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Silmukan viimeinen rivi, `self._clock.tick(60)`, kutsuu [Clock](http://www.pygame.org/docs/ref/time.html#pygame.time.Clock)-luokan `tick`-metodia. Metodin kutsu palauttaa ajan millisekunneissa edellisestä kutsusta. Kun metodille annetaan `framerate`-argumentti, se rajoittaa kutsujen määrän maksimissaan haluttuun lukumäärään sekunnissa. Esimerkin rivi rajoittaa siis pelin nopeuden maksimissaan 60 kierrokseen sekunnissa. Rivi on erityisen tärkeä etenkin, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
 
-Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittaa riippuvuudet Pygamen tapahtumalooppiin, näytön piirtämiseen ja ajastuksiin. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Voimme toteuttaa riippuvuuksille yksinkertaiset abstraktiot.
+Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittavat riippuvuudet Pygamen tapahtumasilmukkaan, näytön piirtämiseen ja aikaan. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Toteutetaan aluksi riippuvuuksille yksinkertaiset abstraktiot.
 
-Pygamen tapahtumaloopin voi toteuttaa `EventLoop`-luokka:
+Pygamen tapahtumasilmukan voi toteuttaa `EventLoop`-luokka:
 
 ```python
 import pygame
@@ -460,7 +481,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`GameLoop`-luokan testaaminen onnistuu hyödyntämällä valeluokkia:
+Kun riippuvuudet injektoidaan konstruktorin kautta, `GameLoop`-luokan testaaminen onnistuu hyödyntämällä valeluokkia:
 
 ```python
 import unittest
@@ -527,11 +548,11 @@ class TestGameLoop(unittest.TestCase):
         self.assertTrue(self.level_1.is_completed())
 ```
 
-Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. Voimme siis testissä olettaa, että tiettyjen tapahtumien seurauksena peli on tietyssä tilassa. Kyseisen testin tapauksessa testetaan, että annetut tapahtumat johtavat tason läpäisyyn.
+Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. Voimme siis testissä tarkistaa, onko tiettyjen tapahtumien seurauksena peli tietyssä tilassa. Kyseisen testin tapauksessa testataan, että annetut tapahtumat johtavat tason läpäisyyn.
 
 ## Aikaan sidotut tapahtumat
 
-Monissa peleissä on aikaan sidottuja tapahtumia, esimerkiksi viholliset liikkuvat satunnaisiin suuntiin tietyin väliajoin. Tällöin pelin objekteihin voi tallentaa esimerkiksi milloin joku tietty tapahtuma tapahtui viimeksi. Esimerkiksi `Enemy`-luokan oliolla voisi olla attribuutti `previous_move_time`, joka kertoo milloin vihollinen liikkui viimeksi ja metodi `should_move`, joka kertoo pitäisi vihollisen liikkua tietyllä ajanhetkellä:
+Monissa peleissä on aikaan sidottuja tapahtumia, esimerkiksi viholliset liikkuvat satunnaisiin suuntiin tietyin väliajoin. Tällöin pelin objekteihin voi tallentaa esimerkiksi tiedon, milloin joku tietty tapahtuma tapahtui viimeksi. Esimerkiksi `Enemy`-luokan oliolla voisi olla attribuutti `previous_move_time`, joka kertoo milloin vihollinen liikkui viimeksi ja metodi `should_move`, joka kertoo pitäisi vihollisen liikkua tietyllä ajanhetkellä:
 
 ```python
 import pygame
@@ -553,7 +574,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    
+
     def should_move(current_time):
         return current_time - self.previous_move_time >= 5000
 ```
@@ -577,7 +598,7 @@ class Level:
 
     _move_enemy(self, enemy):
         # liikuta vihollista esimerkiksi satunnaiseen suuntaan
-    
+
     # ...
 ```
 
@@ -601,7 +622,7 @@ class GameLoop:
 
             # aika, joka on kulunut pelin käynnistymisestä
             current_time = self._clock.get_ticks()
-            
+
             self._level.update(current_time)
             self._render()
 
@@ -616,3 +637,65 @@ class GameLoop:
 
 Aikaisemmin toteutetun `Clock`-luokan metodi `get_ticks` kutsuu Pygamen [get_ticks](https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks)-funktiota, joka palauttaa kuluneet millisekennut [init](https://www.pygame.org/docs/ref/pygame.html)-funktion kutsusta.
 
+Spriteille voi myös delegoida vastuun itsensä päivittämisestä määrittelemällä luokalle [update](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite.update)-metodin. Oletusarvoisesti `Sprite`-luokan `update`-metodi ei tee mitään. Metodi voisi esimerkiksi vaihtaa spriten kuvaa jonkin tietyn attribuutin arvon perusteella:
+
+```python
+import pygame
+import os
+
+dirname = os.path.dirname(__file__)
+
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x=0, y=0, is_angry=False):
+        super().__init__()
+
+        self.previous_move_time = 0
+        self.is_angry = is_angry
+
+        self.image = pygame.image.load(
+            os.path.join(dirname, "assets", "enemy.png")
+        )
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def should_move(current_time):
+        return current_time - self.previous_move_time >= 5000
+
+    def update():
+        if self.is_angry:
+            self._set_angry_image()
+        else:
+            self._set_default_image()
+
+    def _set_angry_image():
+        self.image = pygame.image.load(
+            os.path.join(dirname, "assets", "enemy_is_angry.png")
+        )
+
+    def _set_default_image():
+        self.image = pygame.image.load(
+            os.path.join(dirname, "assets", "enemy.png")
+        )
+```
+
+Spriten omaa `update`-metodia voi kutsua sovelluslogiikan `update`-luokassa:
+
+```python
+update(self, current_time):
+    for enemy in self.enemies:
+        if self.enemy.should_move(current_time):
+            self._move_enemy(enemy)
+            enemy.previous_move_time = current_time
+
+    # metodi kutsuu jokaisen spriten update-metodia
+    self.enemies.update()
+```
+
+Huomaa, että `Group`-olion `update` metodi kutsuu jokaisen yksittäisen spriten `update` metodia. Metodille voi myös antaa vapaamuotoisia argumentteja, jotka annetaan sellaisenaan spriten `update`-metodille.
+
+# Lisäluettavaa
+
+Internet on pullollaan erilaisia Pygame-ohjeita. Pygamen omasta [dokumentaatiosa](https://www.pygame.org/docs/index.html) löytyy ohjeita yksittäisiin käyttötarkoituksiin. Tämän lisäksi [PyGame: A Primer on Game Programming in Python](https://realpython.com/pygame-a-primer/) on melko kattava ohje tärkeimmistä aihealueista.
