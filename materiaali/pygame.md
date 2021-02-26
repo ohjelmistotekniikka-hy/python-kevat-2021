@@ -43,7 +43,7 @@ class Robot(pygame.sprite.Sprite):
 
         # muodostetaan polku tiedoston hakemistosta hakemistoon, jossa kuva sijaitsee
         self.image = pygame.image.load(
-            os.path.join(dirname, 'assets', 'robot.png')
+            os.path.join(dirname, "assets", "robot.png")
         )
 
         # määritellään objektin ulottuvuudet. Tässä tapauksessa muodostetaan suorakulmia kuvan koon perusteella (50x50)
@@ -54,7 +54,7 @@ class Robot(pygame.sprite.Sprite):
         self.rect.y = y
 ```
 
-Luokan `image`-attribuutin arvoksi tulee asettaa kuva, joka piirretään näytölle. Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla sen `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella.
+Luokan `image`-attribuutin arvoksi tulee asettaa kuva, joka piirretään näytölle. Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla sen `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella. Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name` ja `color`.
 
 ## Pelin tilan hallinta
 
@@ -289,7 +289,7 @@ def move_robot(self, dx=0, dy=0):
 
 ## Pelaajan syötteiden lukeminen
 
-Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "Game loop". Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
+Peli pyörii usein ikuisen loopin sisällä, josta käytetään nimitystä "pelilooppi" (Game loop). Tämän loopin sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Loopin voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
 
 ```python
 import pygame
@@ -332,7 +332,7 @@ class GameLoop:
         pygame.display.update()
 ```
 
-Luokan metodi `start` käynnistää ikuisen loopin. Loopin sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-loopissa tapahtumia Pygamen tapahtumaloopista. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Loopin viimeinen rivi, `self._clock.tick(60)`, rajoittaa näkymien piirtämiseen 60 sekunnissa. Rivi on erityisen tärkeä, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
+Luokan metodi `start` käynnistää ikuisen loopin. Loopin sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-loopissa tapahtumia Pygamen tapahtumaloopista. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Loopin viimeinen rivi, `self._clock.tick(60)`, kutsuu [Clock](http://www.pygame.org/docs/ref/time.html#pygame.time.Clock)-luokan `tick`-metodia. Metin kutsu palauttaa ajan millisekunneissa edellisestä kutsusta. Kun metodille annetaan `framerate`-argumentti, se rajoittaa kutsujen määrän maksimissaan haluttuun lukumäärään sekunnissa. Esimerkin rivi rajoittaa siis pelin nopeuden maksimissaan 60 kierrokseen sekunnissa. Rivi on erityisen tärkeä, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
 
 Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittaa riippuvuudet Pygamen tapahtumalooppiin, näytön piirtämiseen ja ajastuksiin. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Voimme toteuttaa riippuvuuksille yksinkertaiset abstraktiot.
 
@@ -374,12 +374,16 @@ class Clock:
 
     def tick(self, fps):
         self._clock.tick(fps)
+
+    def get_ticks(self):
+        return pygame.time.get_ticks()
 ```
 
 Nyt voimme injektoida riippuvuudet `GameLoop`-luokkaan sen konstruktorin kautta ja hyödyntää niitä luokan metodeissa:
 
 ```python
 import pygame
+
 
 class GameLoop:
     def __init__(self, level, renderer, event_loop, clock, grid_size):
@@ -470,6 +474,9 @@ class StubClock:
     def tick(self, fps):
         pass
 
+    def get_ticks(self):
+        0
+
 
 class StubEvent:
     def __init__(self, event_type, key):
@@ -520,4 +527,92 @@ class TestGameLoop(unittest.TestCase):
         self.assertTrue(self.level_1.is_completed())
 ```
 
-Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. 
+Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. Voimme siis testissä olettaa, että tiettyjen tapahtumien seurauksena peli on tietyssä tilassa. Kyseisen testin tapauksessa testetaan, että annetut tapahtumat johtavat tason läpäisyyn.
+
+## Aikaan sidotut tapahtumat
+
+Monissa peleissä on aikaan sidottuja tapahtumia, esimerkiksi viholliset liikkuvat satunnaisiin suuntiin tietyin väliajoin. Tällöin pelin objekteihin voi tallentaa esimerkiksi milloin joku tietty tapahtuma tapahtui viimeksi. Esimerkiksi `Enemy`-luokan oliolla voisi olla attribuutti `previous_move_time`, joka kertoo milloin vihollinen liikkui viimeksi ja metodi `should_move`, joka kertoo pitäisi vihollisen liikkua tietyllä ajanhetkellä:
+
+```python
+import pygame
+import os
+
+dirname = os.path.dirname(__file__)
+
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x=0, y=0):
+        super().__init__()
+
+        self.previous_move_time = 0
+
+        self.image = pygame.image.load(
+            os.path.join(dirname, "assets", "enemy.png")
+        )
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    
+    def should_move(current_time):
+        return current_time - self.previous_move_time >= 5000
+```
+
+Metodi `should_move` tarkistaa onko viimeisestä liikkumisesta kulunut aikaa yli 5000 millisekunttia (5 sekunttia). Sovelluslogiikasta vastaavassa luokassa voimme liikutella vihollisia seuraavaan tapaan:
+
+```python
+import pygame
+from enemy import Enemy
+
+
+class Level:
+    def __init__(self):
+        self.enemies = pygame.sprite.Group()
+
+    update(self, current_time):
+        for enemy in self.enemies:
+            if self.enemy.should_move(current_time):
+                self._move_enemy(enemy)
+                enemy.previous_move_time = current_time
+
+    _move_enemy(self, enemy):
+        # liikuta vihollista esimerkiksi satunnaiseen suuntaan
+    
+    # ...
+```
+
+Luokan `update`-metodin kutsu tapahtuu peliloopissa:
+
+```python
+import pygame
+
+class GameLoop:
+    def __init__(self, level, renderer, event_loop, clock, grid_size):
+        self._level = level
+        self._renderer = renderer
+        self._event_loop = event_loop
+        self._clock = clock
+        self._grid_size = grid_size
+
+    def start(self):
+        while True:
+            if self._handle_events() == False:
+                break
+
+            # aika, joka on kulunut pelin käynnistymisestä
+            current_time = self._clock.get_ticks()
+            
+            self._level.update(current_time)
+            self._render()
+
+            self._clock.tick(60)
+
+    def _handle_events(self):
+        # ...
+
+    def _render(self):
+        # ...
+```
+
+Aikaisemmin toteutetun `Clock`-luokan metodi `get_ticks` kutsuu Pygamen [get_ticks](https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks)-funktiota, joka palauttaa kuluneet millisekennut [init](https://www.pygame.org/docs/ref/pygame.html)-funktion kutsusta.
+
