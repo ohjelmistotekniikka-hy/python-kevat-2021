@@ -74,7 +74,7 @@ Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuuti
 self.rect = pygame.Rect(x, y, width, height)
 ```
 
-Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name`, tai `color`.
+Huomaa, että `Robot`-luokan konstruktorilla voisi hyvin olla koordinaattien lisäksi myös muita argumentteja, kuten `name`, tai `color`.
 
 ## Pelin tilan hallinta
 
