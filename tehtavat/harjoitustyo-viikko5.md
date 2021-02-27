@@ -18,7 +18,7 @@ Palautuksesta on tarjolla 3 kurssipistettä.
 
 Arvostelussa kiinnitetään huomiota seuraaviin seikkoihin:
 
-- Ohjelmasta pystyy pystyy suorittamaan komentoriviltä komennolla `poetry run invoke start` (0.5p)
+- Ohjelman pystyy suorittamaan komentoriviltä komennolla `poetry run invoke start` (0.5p)
 - Projektista on tehty _GitHub release_ (0.25p)
   - Release sisältää ohjelman uusimman version lähdekoodin (GitHub-lisää tämän automaattisesti releasin tehdessä)
   - [Ohje](../materiaali/release.md) releasen tekemiseen
@@ -57,7 +57,7 @@ Arvostelussa kiinnitetään huomiota seuraaviin seikkoihin:
 - Palautusrepositorioosi voi tehdä GitHub-issuieta, katso [ohje](#issueiden-salliminen)
 - Repositorion _README.md_-tiedosto on kunnossa
   - Tiedosto on kurssin tämän vaiheen osalta relevantin sisällön suhteen samankaltainen kuin [referenssisovelluksen](https://github.com/ohjelmistotekniikka-hy/python-todo-app) README.md, eli siellä on ainakin seuraavat
-    - Harjoitustyön aiheen lyhyt kuvas
+    - Harjoitustyön aiheen lyhyt kuvaus
     - Linkit vaatimusmäärittelyyn, arkkitehtuuridokumenttiin ja tuntikirjanpitoon
     - Linkki releaseen
     - Ohjeet komentoriviltä suoritettaviin toimenpiteisiin (ohjelman käynnistys, testaus, testikattavuusraportin suoritus, pylint-tarkistuksien suorittaminen)
