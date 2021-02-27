@@ -19,12 +19,12 @@ Järkevästi toteutettu sovelluslogiikka on pelin koko toteutuksen kulmakivi. Se
 Sokoban-pelissä erilaisia objekteja ovat:
 
 - _Robotti_, joka toimii pelihahmona. Pelihahmo voi liikkua lattialla ja siirtää laatikoita, jos ne eivät törmää seinään tai toiseen laatikkoon
-- _Seinä_, joka rajaa peli kentän. Mikään muu objekti ei voi liikkua seinän läpi
+- _Seinä_, joka rajaa pelikentän. Mikään muu objekti ei voi liikkua seinän läpi
 - _Lattia_, jonka päällä robotti voi kävellä
 - _Laatikko_, jota robotti voi siirtää, jos se ei törmää seinään tai muihin laatikoihin
 - _Kohde_, johon laatikko pitäisi siirtää
 
-Pygamessa pelin objekteja mallinnetaan usein luokilla, jotka perivät [Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite)-luokan. Peliohjelmoinnin yhteydessä [sprite](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>)-termillä tarkoitetaan kaksiulotteista kuvaa, jota käytetään usein antamaan pelin objektille sen visuaaliainen ilme. `Sprite`-luokka tarjoaa visuaalisen ilmeen lisäksi myös muita hyödyllisiä toiminallisuuksia, kuten mahdollisuuden tarkistaa törmääkö tietty `Sprite`-olio joidenkin muiden `Sprite`-olioiden kanssa.
+Pygamessa pelin objekteja mallinnetaan usein luokilla, jotka perivät [Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite)-luokan. Peliohjelmoinnin yhteydessä [sprite](<https://en.wikipedia.org/wiki/Sprite_(computer_graphics)>)-termillä tarkoitetaan kaksiulotteista kuvaa, jota käytetään usein antamaan pelin objektille sen visuaalinen ilme. `Sprite`-luokka tarjoaa visuaalisen ilmeen lisäksi myös muita hyödyllisiä toiminallisuuksia, kuten mahdollisuuden tarkistaa törmääkö tietty `Sprite`-olio joidenkin muiden `Sprite`-olioiden kanssa.
 
 Sokoban-pelissä pelihahmon `Robot`-luokka näyttää seuraavalta:
 
@@ -68,7 +68,7 @@ pyproject.toml
 ...
 ```
 
-Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla kuvan `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella. Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name` ja `color`.
+Attribuutti `rect` määrittää objektin ulottuvuudet suorakulmiona. Attribuutin arvo on helpointa asettaa kuvan ulottuvuuksien perusteella kutsumalla kuvan `get_rect`-metodia. Suorakulmion x- ja y-koordinaatin arvot kannattaa asettaa luokan konstruktorin argumenttien perusteella. Huomaa, että luokan konstruktorilla voi hyvin olla myös muita argumentteja, kuten `name`, tai `color`.
 
 ## Pelin tilan hallinta
 
