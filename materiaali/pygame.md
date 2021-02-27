@@ -84,8 +84,8 @@ from wall import Wall
 
 
 class Level:
-    def __init__(self, level_map, grid_size):
-        self.grid_size = grid_size
+    def __init__(self, level_map, cell_size):
+        self.cell_size = cell_size
         self.robot = None
         self.walls = pygame.sprite.Group()
         self.targets = pygame.sprite.Group()
@@ -101,20 +101,20 @@ class Level:
 
         for y in range(height):
             for x in range(width):
-                square = level_map[y][x]
-                normalized_x = x * self.grid_size
-                normalized_y = y * self.grid_size
+                cell = level_map[y][x]
+                normalized_x = x * self.cell_size
+                normalized_y = y * self.cell_size
 
-                if square == 0:
+                if cell == 0:
                     self.floors.add(Floor(normalized_x, normalized_y))
-                elif square == 1:
+                elif cell == 1:
                     self.walls.add(Wall(normalized_x, normalized_y))
-                elif square == 2:
+                elif cell == 2:
                     self.targets.add(Target(normalized_x, normalized_y))
-                elif square == 3:
+                elif cell == 3:
                     self.boxes.add(Box(normalized_x, normalized_y))
                     self.floors.add(Floor(normalized_x, normalized_y))
-                elif square == 4:
+                elif cell == 4:
                     self.robot = Robot(normalized_x, normalized_y)
                     self.floors.add(Floor(normalized_x, normalized_y))
 
@@ -137,18 +137,18 @@ LEVEL_MAP = [[1, 1, 1, 1, 1],
              [1, 2, 3, 4, 1],
              [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 
 def main():
-    level = Level(LEVEL_MAP, GRID_SIZE)
+    level = Level(LEVEL_MAP, CELL_SIZE)
 
 
 if __name__ == "__main__":
     main()
 ```
 
-Luokan konstruktorin `grid_size`-argumentti kuvastaa pelin kuvien kokoa. Kun kuvien koko on 50 pikseliä, tulee esimerkiksi taulukon indeksissä `[1][2]` oleva ruutu piirtää `(x, y)`-pisteeseen `(100, 50)`.
+Luokan konstruktorin `cell_size`-argumentti kuvastaa pelin ruudukon solun kokoa. Kun solun koko on 50 pikseliä, tulee esimerkiksi taulukon indeksissä `[1][2]` oleva ruutu piirtää `(x, y)`-pisteeseen `(100, 50)`.
 
 Pelin spritet kannttaa jaotella ryhmiin, jotka lisätään [Group](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Group)-luokan olioihin. Esimerkiksi seinät on lisätty `initialize_sprites`-metodissa `walls`-attribuuttiin tallennettuun `Group`-olioon kutsumalla olion `add`-metodia seuraavasti:
 
@@ -183,19 +183,19 @@ LEVEL_MAP = [[1, 1, 1, 1, 1],
              [1, 2, 3, 4, 1],
              [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 
 def main():
     height = len(LEVEL_MAP)
     width = len(LEVEL_MAP[0])
-    display_height = height * GRID_SIZE
-    display_width = width * GRID_SIZE
+    display_height = height * CELL_SIZE
+    display_width = width * CELL_SIZE
     display = pygame.display.set_mode((display_width, display_height))
 
     pygame.display.set_caption("Sokoban")
 
-    level = Level(level_map, GRID_SIZE)
+    level = Level(level_map, CELL_SIZE)
 
     pygame.init()
 
@@ -208,9 +208,9 @@ if __name__ == "__main__":
 
 Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia `draw`, joka piirtää ryhmän spritet näytölle.
 
-## Spriten siirtäminen
+## Spriten liikuttaminen
 
-Spritejen siirtäminen, esimerkiksi käyttäjän syötteiden perusteeella, on monissa peleissä yksi tärkeimmistä toiminallisuuksista. Spriten siirtäminen onnistuu muuttamalla `Sprite`-olion `rect`-attribuuttiin tallennetun olion `x`- ja `y`-attribuutin arvoja. Esimerkiksi robotin siirtämistä varten voi toteuttaa `Level`-luokkaan seuraavanlaisen metodin:
+Spritejen liikuttaminen, esimerkiksi käyttäjän syötteiden perusteeella, on monissa peleissä yksi tärkeimmistä toiminallisuuksista. Spriten liikuttaminen onnistuu muuttamalla `Sprite`-olion `rect`-attribuuttiin tallennetun olion `x`- ja `y`-attribuutin arvoja. Esimerkiksi robotin siirtämistä varten voi toteuttaa `Level`-luokkaan seuraavanlaisen metodin:
 
 ```python
 def move_robot(self, dx=0, dy=0):
@@ -246,7 +246,7 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 
 class TestLevel(unittest.TestCase):
@@ -260,13 +260,13 @@ class TestLevel(unittest.TestCase):
     def test_can_move_in_floor(self):
         robot = self.level_1.robot
 
-        self.assert_coordinates_equal(robot, 3 * GRID_SIZE, 2 * GRID_SIZE)
+        self.assert_coordinates_equal(robot, 3 * CELL_SIZE, 2 * CELL_SIZE)
 
-        self.level_1.move_robot(dy=-GRID_SIZE)
-        self.assert_coordinates_equal(robot, 3 * GRID_SIZE, GRID_SIZE)
+        self.level_1.move_robot(dy=-CELL_SIZE)
+        self.assert_coordinates_equal(robot, 3 * CELL_SIZE, CELL_SIZE)
 
-        self.level_1.move_robot(dx=-GRID_SIZE)
-        self.assert_coordinates_equal(robot, 2 * GRID_SIZE, GRID_SIZE)
+        self.level_1.move_robot(dx=-CELL_SIZE)
+        self.assert_coordinates_equal(robot, 2 * CELL_SIZE, CELL_SIZE)
 ```
 
 Seuraavaksi voisi olla mielekästä toteuttaa `Level`-luokan `move_robot`-metodiin tarkistus, ettei robotti pysty kulkemaan seinien läpi. Tälle toiminallisuudelle voisi jälleen toteuttaa oman testinsä. Toteutusta ja testaamista kannattaa siis tehdä lyhyissä sykleissä.
@@ -293,7 +293,13 @@ def _robot_can_move(self, dx=0, dy=0):
     return can_move
 ```
 
-Metodi ensin siirtää robottia, jonka jälkeen se tarkistaa [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion avulla osuuko jokin seinistä robottiin. Funktio palauttaa listan spriteja, joihin argumenttina annettu sprite törmää. Jos lista on tyhjä, törmäystä ei tapahdu. Funktion viimeinen argumentti, `dokill`, on boolean-arvo, joka kertoo poistetaanko kaikkii törmänneet spritet ryhmästä. Koska emme halua näin tapahtuvan, asetamme sen arvoksi `False`.
+Metodi ensin siirtää robottia, jonka jälkeen se tarkistaa [spritecollide](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.spritecollide)-funktion avulla osuuko jokin seinistä robottiin. Funktio palauttaa listan ryhmän spriteja, joihin argumenttina annettu sprite törmää. Jos lista on tyhjä, törmäystä ei tapahdu. Funktion viimeinen argumentti, `dokill`, on boolean-arvo, joka kertoo poistetaanko kaikkii törmänneet spritet ryhmästä. Koska emme halua näin tapahtuvan, asetamme sen arvoksi `False`. Yksittäisten spritejen törmäämisen tarkastelu onnistuu [collide_rect](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.collide_rect)-funktion avulla:
+
+```python
+pygame.sprite.collide_rect(sprite, other_sprite)
+```
+
+Funktio palauttaa boolean-arvon, joka kertoo törmäävätkö argumentteina annetut spritet keskenään. Lisää funktioita spritejen törmäyksen tarkastamiseen löytyy sprite-moduulin [dokumentaatiosta](https://www.pygame.org/docs/ref/sprite.html).
 
 Voimme hyödyntää `robot_can_move`-metodia edellä toteutetussa `move_robot`-metodissa seuraavasti:
 
@@ -315,10 +321,10 @@ import pygame
 
 
 class GameLoop:
-    def __init__(self, level, grid_size, display):
+    def __init__(self, level, cell_size, display):
         self._level = level
         self._clock = pygame.time.Clock()
-        self._grid_size = grid_size
+        self._cell_size = cell_size
         self._display = display
 
     def start(self):
@@ -335,13 +341,13 @@ class GameLoop:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self._level.move_robot(dx=-self._grid_size)
+                    self._level.move_robot(dx=-self._cell_size)
                 if event.key == pygame.K_RIGHT:
-                    self._level.move_robot(dx=self._grid_size)
+                    self._level.move_robot(dx=self._cell_size)
                 if event.key == pygame.K_UP:
-                    self._level.move_robot(dy=-self._grid_size)
+                    self._level.move_robot(dy=-self._cell_size)
                 if event.key == pygame.K_DOWN:
-                    self._level.move_robot(dy=self._grid_size)
+                    self._level.move_robot(dy=self._cell_size)
             elif event.type == pygame.QUIT:
                 return False
 
@@ -405,12 +411,12 @@ import pygame
 
 
 class GameLoop:
-    def __init__(self, level, renderer, event_loop, clock, grid_size):
+    def __init__(self, level, renderer, event_loop, clock, cell_size):
         self._level = level
         self._renderer = renderer
         self._event_loop = event_loop
         self._clock = clock
-        self._grid_size = grid_size
+        self._cell_size = cell_size
 
     def start(self):
         while True:
@@ -425,13 +431,13 @@ class GameLoop:
         for event in self._event_loop.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self._level.move_robot(dx=-self._grid_size)
+                    self._level.move_robot(dx=-self._cell_size)
                 if event.key == pygame.K_RIGHT:
-                    self._level.move_robot(dx=self._grid_size)
+                    self._level.move_robot(dx=self._cell_size)
                 if event.key == pygame.K_UP:
-                    self._level.move_robot(dy=-self._grid_size)
+                    self._level.move_robot(dy=-self._cell_size)
                 if event.key == pygame.K_DOWN:
-                    self._level.move_robot(dy=self._grid_size)
+                    self._level.move_robot(dy=self._cell_size)
             elif event.type == pygame.QUIT:
                 return False
 
@@ -454,22 +460,22 @@ LEVEL_MAP = [[1, 1, 1, 1, 1],
              [1, 2, 3, 4, 1],
              [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 def main():
     height = len(LEVEL_MAP)
     width = len(LEVEL_MAP[0])
-    display_height = height * GRID_SIZE
-    display_width = width * GRID_SIZE
+    display_height = height * CELL_SIZE
+    display_width = width * CELL_SIZE
     display = pygame.display.set_mode((display_width, display_height))
 
     pygame.display.set_caption("Sokoban")
 
-    level = Level(LEVEL_MAP, GRID_SIZE)
+    level = Level(LEVEL_MAP, CELL_SIZE)
     event_loop = EventLoop()
     renderer = Renderer(display, level)
     clock = Clock()
-    game_loop = GameLoop(level, renderer, event_loop, clock, GRID_SIZE)
+    game_loop = GameLoop(level, renderer, event_loop, clock, CELL_SIZE)
 
     pygame.init()
     game_loop.start()
@@ -521,12 +527,12 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 
 class TestGameLoop(unittest.TestCase):
     def setUp(self):
-        self.level_1 = Level(LEVEL_MAP_1, GRID_SIZE)
+        self.level_1 = Level(LEVEL_MAP_1, CELL_SIZE)
 
     def test_can_complete_level(self):
         events = [
@@ -538,7 +544,7 @@ class TestGameLoop(unittest.TestCase):
             StubRenderer(),
             StubEventLoop(events),
             StubClock(),
-            GRID_SIZE
+            CELL_SIZE
         )
 
         game_loop.start()
@@ -606,12 +612,12 @@ Luokan `update`-metodin kutsu tapahtuu peliloopissa:
 import pygame
 
 class GameLoop:
-    def __init__(self, level, renderer, event_loop, clock, grid_size):
+    def __init__(self, level, renderer, event_loop, clock, cell_size):
         self._level = level
         self._renderer = renderer
         self._event_loop = event_loop
         self._clock = clock
-        self._grid_size = grid_size
+        self._cell_size = cell_size
 
     def start(self):
         while True:
