@@ -608,7 +608,7 @@ class Level:
     # ...
 ```
 
-Luokan `update`-metodin kutsu tapahtuu peliloopissa:
+Luokan `update`-metodin kutsu tapahtuu pelisilmukassa:
 
 ```python
 import pygame
