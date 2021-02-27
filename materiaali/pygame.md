@@ -311,13 +311,12 @@ def move_robot(self, dx=0, dy=0):
     if not self._robot_can_move(dx, dy):
         return
 
-    self.robot.rect.x += dx
-    self.robot.rect.y += dy
+    self.robot.rect.move_ip(dx, dy)
 ```
 
 ## Pelaajan syötteiden lukeminen
 
-Peli pyörii usein ikuisen silmukan sisällä, josta käytetään nimitystä "pelisilmukka" (Game loop). Tämän silmukan sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Silmukan voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
+Peli pyörii usein ikuisen silmukan sisällä, josta käytetään nimitystä _pelisilmukka_ (game loop). Tämän silmukan sisällä luetaan pelaajan syötteet, päivitetään pelin tila syötteiden perusteella ja piirretään uusi näkymä. Silmukan voi toteuttaa esimerkiksi seuraavanlaisen `GameLoop`-luokan avulla:
 
 ```python
 import pygame
@@ -360,16 +359,16 @@ class GameLoop:
         pygame.display.update()
 ```
 
-Luokan metodi `start` käynnistää ikuisen silmukan. Silmukan sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-silmukassa tapahtumia Pygamen tapahtumasilmukasta. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Silmukan viimeinen rivi, `self._clock.tick(60)`, kutsuu [Clock](http://www.pygame.org/docs/ref/time.html#pygame.time.Clock)-luokan `tick`-metodia. Metodin kutsu palauttaa ajan millisekunneissa edellisestä kutsusta. Kun metodille annetaan `framerate`-argumentti, se rajoittaa kutsujen määrän maksimissaan haluttuun lukumäärään sekunnissa. Esimerkin rivi rajoittaa siis pelin nopeuden maksimissaan 60 kierrokseen sekunnissa. Rivi on erityisen tärkeä etenkin, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
+Luokan metodi `start` käynnistää ikuisen silmukan. Silmukan sisällä kutsutaan ensimmäiseksi luokan `handle_events`-metodia. Metodi lukee for-silmukassa tapahtumia Pygamen tapahtumajonosta event-moduulin [get](https://www.pygame.org/docs/ref/event.html#pygame.event.get)-funktion avulla. Tapahtumien perusteella kutsutaan sovelluslogiikan metodeja. Kun tapahtumat on käsitelty, luokan `render`-metodi piirtää pelin tilan perusteella seuraavan näkymän. Silmukan viimeinen rivi, `self._clock.tick(60)`, kutsuu [Clock](http://www.pygame.org/docs/ref/time.html#pygame.time.Clock)-luokan `tick`-metodia. Metodin kutsu palauttaa ajan millisekunneissa edellisestä kutsusta. Kun metodille annetaan `framerate`-argumentti, se rajoittaa kutsujen määrän maksimissaan haluttuun lukumäärään sekunnissa. Esimerkin rivi rajoittaa siis pelin nopeuden maksimissaan 60 kierrokseen sekunnissa. Rivi on erityisen tärkeä etenkin, jos pelissä on aikaan sidottuja tapahtumia, kuten vihollisten liikkumista.
 
-Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittavat riippuvuudet Pygamen tapahtumasilmukkaan, näytön piirtämiseen ja aikaan. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Toteutetaan aluksi riippuvuuksille yksinkertaiset abstraktiot.
+Tässä muodossa `GameLoop`-luokan testaaminen on vähintään hankalaa. Testaamista hankaloittavat riippuvuudet Pygamen tapahtumajonoon, näytön piirtämiseen ja aikaan. Onneksi olemme jo oppineet, kuinka nämä ongelmat voidaan ratkaista _riippuvuuksien injektoinnilla_. Toteutetaan aluksi riippuvuuksille yksinkertaiset abstraktiot.
 
-Pygamen tapahtumasilmukan voi toteuttaa `EventLoop`-luokka:
+Pygamen tapahtumajonon voi toteuttaa `EventQueue`-luokka:
 
 ```python
 import pygame
 
-class EventLoop:
+class EventQueue:
     def get(self):
         return pygame.event.get()
 ```
@@ -414,10 +413,10 @@ import pygame
 
 
 class GameLoop:
-    def __init__(self, level, renderer, event_loop, clock, cell_size):
+    def __init__(self, level, renderer, event_queue, clock, cell_size):
         self._level = level
         self._renderer = renderer
-        self._event_loop = event_loop
+        self._event_queue = event_queue
         self._clock = clock
         self._cell_size = cell_size
 
@@ -431,7 +430,7 @@ class GameLoop:
             self._clock.tick(60)
 
     def _handle_events(self):
-        for event in self._event_loop.get():
+        for event in self._event_queue.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self._level.move_robot(dx=-self._cell_size)
@@ -454,7 +453,7 @@ Luokan käyttö onnistuu seuraavasti:
 import pygame
 from level import Level
 from game_loop import GameLoop
-from event_loop import EventLoop
+from event_queue import EventQueue
 from renderer import Renderer
 from clock import Clock
 
@@ -475,10 +474,10 @@ def main():
     pygame.display.set_caption("Sokoban")
 
     level = Level(LEVEL_MAP, CELL_SIZE)
-    event_loop = EventLoop()
+    event_queue = EventQueue()
     renderer = Renderer(display, level)
     clock = Clock()
-    game_loop = GameLoop(level, renderer, event_loop, clock, CELL_SIZE)
+    game_loop = GameLoop(level, renderer, event_queue, clock, CELL_SIZE)
 
     pygame.init()
     game_loop.start()
@@ -512,7 +511,7 @@ class StubEvent:
         self.key = key
 
 
-class StubEventLoop:
+class StubEventQueue:
     def __init__(self, events):
         self._events = events
 
@@ -545,7 +544,7 @@ class TestGameLoop(unittest.TestCase):
         game_loop = GameLoop(
             self.level_1,
             StubRenderer(),
-            StubEventLoop(events),
+            StubEventQueue(events),
             StubClock(),
             CELL_SIZE
         )
@@ -555,7 +554,7 @@ class TestGameLoop(unittest.TestCase):
         self.assertTrue(self.level_1.is_completed())
 ```
 
-Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventLoop`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. Voimme siis testissä tarkistaa, onko tiettyjen tapahtumien seurauksena peli tietyssä tilassa. Kyseisen testin tapauksessa testataan, että annetut tapahtumat johtavat tason läpäisyyn.
+Luokat `StubRenderer` ja `StubClock` eivät tee mitään, koska niiden toiminallisuudella ei ole testin kannalta merkitystä. `StubEventQueue`-luokkalle annetaan ennalta määrätty lista tapahtumia, jotka `GameLoop`-luokka käy läpi ja toteuttaa niiden mukaiset toimenpiteet. Voimme siis testissä tarkistaa, onko tiettyjen tapahtumien seurauksena peli tietyssä tilassa. Kyseisen testin tapauksessa testataan, että annetut tapahtumat johtavat tason läpäisyyn.
 
 ## Aikaan sidotut tapahtumat
 
@@ -644,7 +643,7 @@ class GameLoop:
 
 Aikaisemmin toteutetun `Clock`-luokan metodi `get_ticks` kutsuu Pygamen [get_ticks](https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks)-funktiota, joka palauttaa kuluneet millisekennut [init](https://www.pygame.org/docs/ref/pygame.html)-funktion kutsusta.
 
-Spriteille voi myös delegoida vastuun itsensä päivittämisestä määrittelemällä luokalle [update](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite.update)-metodin. Oletusarvoisesti `Sprite`-luokan `update`-metodi ei tee mitään. Metodi voisi esimerkiksi vaihtaa spriten kuvaa jonkin tietyn attribuutin arvon perusteella:
+Spriteille voi myös delegoida vastuun itsensä päivittämisestä määrittelemällä luokalle [update](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite.update)-metodin. Oletusarvoisesti `Sprite`-luokalta peritty `update`-metodi ei tee mitään. Metodi voisi esimerkiksi vaihtaa spriten kuvaa jonkin tietyn attribuutin arvon perusteella:
 
 ```python
 import pygame
@@ -701,7 +700,7 @@ update(self, current_time):
     self.enemies.update()
 ```
 
-Huomaa, että `Group`-olion `update` metodi kutsuu jokaisen yksittäisen spriten `update` metodia. Metodille voi myös antaa vapaamuotoisia argumentteja, jotka annetaan sellaisenaan spriten `update`-metodille.
+Huomaa, että `Group`-olion `update`-metodi kutsuu jokaisen yksittäisen spriten `update`-metodia. Metodille voi myös antaa vapaamuotoisia argumentteja, jotka välitetään sellaisenaan spriten `update`-metodille.
 
 # Lisäluettavaa
 
