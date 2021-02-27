@@ -702,6 +702,6 @@ update(self, current_time):
 
 Huomaa, että `Group`-olion `update`-metodi kutsuu jokaisen yksittäisen spriten `update`-metodia. Metodille voi myös antaa vapaamuotoisia argumentteja, jotka välitetään sellaisenaan spriten `update`-metodille.
 
-# Lisäluettavaa
+## Lisäluettavaa
 
 Internet on pullollaan erilaisia Pygame-ohjeita. Pygamen omasta [dokumentaatiosa](https://www.pygame.org/docs/index.html) löytyy ohjeita yksittäisiin käyttötarkoituksiin. Tämän lisäksi [PyGame: A Primer on Game Programming in Python](https://realpython.com/pygame-a-primer/) on melko kattava ohje tärkeimmistä aihealueista.
