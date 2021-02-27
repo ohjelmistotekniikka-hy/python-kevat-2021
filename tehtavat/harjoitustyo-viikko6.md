@@ -7,7 +7,7 @@ Palautuksen deadline **ti 08.12. klo 23:59**.
 - **Viikon 6 aikana tapahtuu koodikatselmointi**, tarkemmat ohjeet katselmointiin [täällä](../materiaali/koodikatselmointi.md)
 - Kannattaa pitää mielessä, että kurssin loppu alkaa lähestyä ja myös loppupalautuksen deadline.
   - Nyt kannattaa kerrata loppupalautuksen [arvosteluperusteet](../materiaali/arvosteluperusteet.md)
-  - Viimeiselläkin viikolla ohjelmaa ehtii vielä kasvattamaa, mutta myös dokumentoinnille kannattaa jättää aikaa
+  - Viimeiselläkin viikolla ohjelmaa ehtii vielä kasvattaa, mutta myös dokumentoinnille kannattaa jättää aikaa
 
 **HUOM! Saadaksesi harjoitustyöstä viikkokohtaiset pisteet, sovelluksen tulee toimia laitoksen koneella ja ohjaajien pitää pystyä se niiltä aukaisemaan!!** Esim. [Virtuaalisessatyöasemassa](https://vdi.helsinki.fi) voit testata tätä.
 
@@ -17,7 +17,7 @@ Arvostelussa kiinnitetään huomiota seuraaviin seikkoihin:
   - Ohjelman pystyy suorittamaan komentoriviltä komennolla `poetry run invoke start`
   - Ohjelman suoritettavissa oleva versio on kasvanut edellisestä viikosta _ja_ toteuttaa edellisen viikon versiota suuremman osan määrittelydokumentin toiminnallisuudesta eli jotain käyttäjälle näkyvää hyödyllistä toiminnallisuutta.
   - Merkitse lisäksi tarkastusta varten määrittelydokumenttiin tällä viikolla tekemäsi toiminnallisuudet "tehty" merkinnällä.
-  - Ohjelman suoritettavissa olevasta versiosta on tehty uusi [GitHub-release](../materiaali/release.md), joka sisältää ohjelman uusimman version lähdekoodin (GitHub-lisää tämän automaattisesti releasin tehdessä)
+  - Ohjelman suoritettavissa olevasta versiosta on tehty uusi [GitHub-release](../materiaali/release.md), joka sisältää ohjelman uusimman version lähdekoodin (GitHub lisää tämän automaattisesti releasin tehdessä)
 - Koodin laatu (0.5p)
   - Ohjelma ei sisällä suurta määrää toisteista koodia eli copy-pastea
   - Ohjelman rakenne on järkevä
@@ -56,7 +56,7 @@ Arvostelussa kiinnitetään huomiota seuraaviin seikkoihin:
   - Tuntikirjanpitoon ei merkitä laskareihin käytettyä aikaa
 - Repositorion _README.md_-tiedosto on kunnossa
   - Tiedosto on kurssin tämän vaiheen osalta relevantin sisällön suhteen samankaltainen kuin [referenssisovelluksen](https://github.com/ohjelmistotekniikka-hy/python-todo-appp) README.md, eli se sisältää ainakin seuraavat
-    - Harjoitustyön aiheen lyhyt kuvas
+    - Harjoitustyön aiheen lyhyt kuvaus
     - Linkit vaatimusmäärittelyyn, arkkitehtuuridokumenttiin, käyttöohjeeseen ja tuntikirjanpitoon
     - Linkki releaseihin
     - Ohjeet komentoriviltä suoritettaviin toimenpiteisiin (ohjelman käynnistys, testaus, testikattavuusraportin suoritus, pylint-tarkistuksien suorittaminen)
