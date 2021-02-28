@@ -142,8 +142,6 @@ Koneesi julkinen avain on talletettava GitHubiin. Ohje avaimen generointiin ja t
 
 Kloonaus tapahtuu seuraavasti:
 
-- mene sopivaan hakemistoon koneellasi
-  - **ÄLÄ** kuitenkaan mene minkään git-repositorion sisälle
 - avaa palautusrepositoriosi
 - klikkaa kohtaa _clone or download_ ja kopioi kloonausurl
   - varmista että valittuna on "clone with SSH"
