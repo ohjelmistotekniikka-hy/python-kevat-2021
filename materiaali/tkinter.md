@@ -302,13 +302,13 @@ class UI:
 
 ```python
 button_a = ttk.Button(
-    master=self.root,
+    master=self._root,
     text="Button A",
     command=lambda: self._handle_button_click('button a')
 )
 
 button_a = ttk.Button(
-    master=self.root,
+    master=self._root,
     text="Button B",
     command=lambda: self._handle_button_click('button b')
 )
