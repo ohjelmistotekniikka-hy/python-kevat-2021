@@ -197,22 +197,29 @@ def main():
     width = len(LEVEL_MAP[0])
     display_height = height * CELL_SIZE
     display_width = width * CELL_SIZE
+
+    # alustetaan ikkuna
     display = pygame.display.set_mode((display_width, display_height))
 
     pygame.display.set_caption("Sokoban")
 
     level = Level(level_map, CELL_SIZE)
 
+    # alustetaan Pygamen moduulit
     pygame.init()
 
-    # piirretään all_sprites ryhmän spritet
-    level.all_sprites.draw()
+    # piirretään all_sprites ryhmän spritet ikkunaan
+    level.all_sprites.draw(display)
 
 if __name__ == "__main__":
     main()
 ```
 
-Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia `draw`, joka piirtää ryhmän spritet.
+Funktio [set_mode](https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode) alustaa ikkunan, jonka koko määritellään argumenttina annettuna tuplena. Funktio palauttaa [Surface](https://www.pygame.org/docs/ref/surface.html#pygame.Surface)-olion, johon spritejä voi piirtää. Rivillä `level.all_sprites.draw()` kutsutaan `all_sprites`-attribuuttiin tallennetun `Group`-olion metodia [draw](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Group.draw), joka piirtää ryhmän spritet argumenttina annetulle `Surface`-oliolle.
+
+Kun koodi suoritetaan, avautuu seuraavanlainen ikkuna:
+
+![Sokoban](./kuvat/pygame-1.png)
 
 ## Spriten liikuttaminen
 
