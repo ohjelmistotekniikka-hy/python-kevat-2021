@@ -48,7 +48,7 @@ Pisteet (yhteensä 24) jakautuvat seuraavasti
 - **Älä jätä sovellukseesi poiskommentoitua koodia**, tai koodia jota sovellus ei käytä (esim. refaktoroinnin myötä turhaksi muuttuneet metodit, luokat, tai funktiot)
   - Jos jätät, vähenevät koodin laadun pisteet -1 tai -2p riippuen kommentoidun/turhan koodin määrästä
 
-### Laajuus ja sovellusogiikan kompleksisuus
+### Laajuus ja sovelluslogiikan kompleksisuus
 
 - Miten laaja on laaja?
 - Kurssin [referenssisovellus](https://github.com/ohjelmistotekniikka-hy/python-todo-app) olisi laajuudeltaan 2 pisteen luokkaa, koska sovelluslogiikaltaan se on kohtalaisen suoraviivainen
