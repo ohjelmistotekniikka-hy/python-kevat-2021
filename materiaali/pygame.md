@@ -666,9 +666,7 @@ class Enemy(pygame.sprite.Sprite):
         self.previous_move_time = 0
         self.is_angry = is_angry
 
-        self.image = pygame.image.load(
-            os.path.join(dirname, "assets", "enemy.png")
-        )
+        self._set_default_image()
 
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -683,12 +681,12 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self._set_default_image()
 
-    def _set_angry_image():
+    def _set_angry_image(self):
         self.image = pygame.image.load(
             os.path.join(dirname, "assets", "enemy_is_angry.png")
         )
 
-    def _set_default_image():
+    def _set_default_image(self):
         self.image = pygame.image.load(
             os.path.join(dirname, "assets", "enemy.png")
         )
