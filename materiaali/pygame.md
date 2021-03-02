@@ -702,6 +702,8 @@ update(self, current_time):
         if self.enemy.should_move(current_time):
             self._move_enemy(enemy)
             enemy.previous_move_time = current_time
+        
+        enemy.is_angry = self._enemy_is_near_player(enemy)
 
     # metodi kutsuu jokaisen spriten update-metodia
     self.enemies.update()
