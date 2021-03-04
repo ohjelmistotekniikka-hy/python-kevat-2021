@@ -20,7 +20,7 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 
 ## Ajankohtaista
 
-- Katso [täältä](https://github.com/ohjelmistotekniikka-hy/syksy-2020#ajankohtaista)
+- Katso [täältä](https://github.com/ohjelmistotekniikka-hy/kevat-2021#ajankohtaista)
 
 ## Aikataulu
 
