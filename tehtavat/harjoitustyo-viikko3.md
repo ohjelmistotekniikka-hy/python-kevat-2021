@@ -1,6 +1,6 @@
 # Harjoitustyö, viikko 3
 
-**Palautuksen deadline ti 17.11. klo 23:59**
+**Palautuksen deadline ti 06.04. klo 23:59**
 
 Muista pushata harjoitustyöhön liittyvät asiat GitHubiin ennen viikkodeadlinea.
 

@@ -2,7 +2,7 @@
 
 # Harjoitustyö, loppupalautus
 
-**Loppupalautuksen deadline sunnuntaina 20.12. klo 23:59. Älä palauta myöhässä, deadline on ehdoton!**
+**Loppupalautuksen deadline sunnuntaina 09.05. klo 23:59. Älä palauta myöhässä, deadline on ehdoton!**
 
 - Jos sinulla on joku erittäin hyvä syy palautuksen myöhästymiseen, ota yhteyttä viimeistään tiistaina niin voit saada lisäaikaa
 - Loppupalautuksen oletetaan sisältävän toimivan ohjelman, testien, konfiguraatioiden ja docstring-dokumentoinnin lisäksi myös dokumentaation, eli:
