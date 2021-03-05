@@ -26,16 +26,16 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 
 ### Viikko 1
 
-Palautuksen deadline ti 03.11. klo 23:59
+Palautuksen deadline ti 23.03. klo 23:59
 
-- Maanantaina 11.3. klo 14-16 kurssin aloitustilaisuus
+- Tiistaina 16.03. klo 12-14 kurssin aloitustilaisuus
 - Komentorivi- ja Git-harjoittelu (2p)
   - Pajassa tehtävät tai omatoimiset [tehtävät](./tehtavat/viikko1.md)
 - Tehtävien palautus tapahtuu tekemällä repositorio GitHubiin ja rekisteröitymällä Labtooliin
 
 ### Viikko 2
 
-Palautuksen deadline ti 10.11. klo 23:59
+Palautuksen deadline ti 30.03. klo 23:59
 
 - Harjoitustyön aiheen alustava määrittelydokumentti (1p)
   - Katso tarkemmin [täältä](./tehtavat/harjoitustyo-viikko2.md)
@@ -45,7 +45,7 @@ Palautuksen deadline ti 10.11. klo 23:59
 
 ### Viikko 3
 
-Palautuksen deadline ti 17.11. klo 23:59
+Palautuksen deadline ti 06.04. klo 23:59
 
 - Harjoitustyön koodin runko valmiina (2p)
   - Katso tarkemmin [täältä](./tehtavat/harjoitustyo-viikko3.md)
@@ -53,7 +53,7 @@ Palautuksen deadline ti 17.11. klo 23:59
 
 ### Viikko 4
 
-Palautuksen deadline ti 24.11. klo 23:59
+Palautuksen deadline ti 13.04. klo 23:59
 
 - Harjoitustyö (3p)
   - Ohjelman perustoiminnallisuus
@@ -64,7 +64,7 @@ Palautuksen deadline ti 24.11. klo 23:59
 
 ### Viikko 5
 
-Palautuksen deadline ti 01.12. klo 23:59
+Palautuksen deadline ti 20.04. klo 23:59
 
 - Harjoitustyö (3p)
   - Release 1
@@ -76,7 +76,7 @@ Palautuksen deadline ti 01.12. klo 23:59
 
 ### Viikko 6
 
-Palautuksen deadline pe 08.12. klo 23:59
+Palautuksen deadline pe 27.04. klo 23:59
 
 - Harjoitustyö (3p)
   - Release 2
@@ -87,6 +87,6 @@ Palautuksen deadline pe 08.12. klo 23:59
 
 ### Viikko 7
 
-Lopullisen palautuksen deadline su 20.12. klo 23:59
+Lopullisen palautuksen deadline su 09.05. klo 23:59
 
 - [Loppupalautuksen ohjeet](./tehtavat/harjoitustyo-viikko7.md)
