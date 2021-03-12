@@ -21,6 +21,7 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 ## Ajankohtaista
 
 - Katso [täältä](https://github.com/ohjelmistotekniikka-hy/kevat-2021#ajankohtaista)
+- Jos olet jo toteuttaunut isohkoja ohjelmistoja, on kurssi tietyissä tapauksissa mahdollista [hyväksilukea](./materiaali/hyvaksiluku.md).
 
 ## Aikataulu
 
