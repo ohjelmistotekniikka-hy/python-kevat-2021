@@ -1,10 +1,16 @@
 # Aiheen valinta ja harjoitustyön aloittaminen
 
+Kurssilla seurataan Helsingin yliopiston opintokäytäntöjä. Plagiarismi ja opintovilppi, eli esimerkiksi netissä olevien tai kaverilta saatujen vastausten kopiointi ja niiden palauttaminen omana työnä on kiellettyä. Todettu opintovilppi johtaa kurssisuorituksen hylkäämiseen ja toistuva opintovilppi voi johtaa opinto-oikeuden määräaikaiseen menettämiseen. Lue lisää osoitteessa https://guide.student.helsinki.fi/fi/artikkeli/mita-ovat-vilppi-ja-plagiointi
+
+
+Mitä plagiointi tarkoittaa harjoitustyön yhteydessä? Idean saa luonnollisesti lainata, mutta koodin suora kopioiminen on kiellettyä poikkeuksena muutaman rivin mittaiset algoritmit. Myös koodin rakenteen suora kopioiminen esim. siten että muuttujien ja funktioiden nimet muutetaan lasketaan plagioinniksi. Esim. kuvia saa toki lainata muualta, mutta näin tehtävessä tulee työn dokumentaatioon tehdä "lähdeviite", eli mainita mistä lainaus on tehty.
+
+Samat plagiaattisäännöt koskevat työn dokumentaatiota, esityisen kiellettyä on copy pasteta referenssisovelluksen dokumentaatiota.
 ## Yleistä
 
 Kurssin pääpainon muodostaa viikolla 2 aloitettava harjoitustyö. Harjoitustyössä toteutetaan itsenäisesti ohjelmisto omavalintaisesta aiheesta. Tavoitteena on soveltaa ja syventää ohjelmoinnin perus- ja jatkokursseilla opittuja taitoja ja harjoitella tiedon omatoimista etsimistä. Harjoitustyötä tehdään itsenäisesti, mutta tarjolla on runsaasti [pajaohjausta](https://github.com/mluukkai/ohjelmistotekniikka-syksy-2020#ajankohtaista).
 
-Harjoitustyön on edettävä [viikottaisten tavoitteiden mukaan](../README.md#aikataulu). Työ on saatava valmiiksi kurssin aikana ja sitä on toteutettava tasaisesti, muuten kurssi katsotaan keskeytetyksi. Samaa ohjelmaa ei voi jatkaa seuraavalla kurssilla (eli keväällä 2021), vaan työ on aloitettava uudella aiheella alusta. Muista varata riittävästi aikaa (10-15h viikossa) koko periodin ajaksi.
+Harjoitustyön on edettävä [viikottaisten tavoitteiden mukaan](../README.md#aikataulu). Työ on saatava valmiiksi kurssin aikana ja sitä on toteutettava tasaisesti, muuten kurssi katsotaan keskeytetyksi. Samaa ohjelmaa ei voi jatkaa seuraavalla kurssilla, vaan työ on aloitettava uudella aiheella alusta. Muista varata riittävästi aikaa (10-15h viikossa) koko periodin ajaksi.
 
 Koko kurssin arvostelu perustuu pääasiassa harjoitustyöstä saataviin pisteisiin. Osa pisteistä kertyy [aikatauluun](../README.md#aikataulu) määriteltyjen viikoittaisten välitavoitteiden kautta, osa taas perustuu työn lopulliseen palautukseen.
 
@@ -16,7 +22,7 @@ Koko kurssin arvostelu perustuu pääasiassa harjoitustyöstä saataviin pisteis
 
 ## Harjoitustyön kieli ja ohjelmointikieli
 
-Harjoitustyön ohjelmointikieli on Python.
+Harjoitustyön ohjelmointikieli on Python tai Java. Javaan liittyvät ohjeet ovat [täällä](https://github.com/ohjelmistotekniikka-hy/kevat-2021/blob/master/web/tyon_aloitus.md).
 
 Web-sovelluksia kurssilla ei sallita. Sovelluksissa sallitaan toki webissä olevat komponentit, mutta sovelluksen käyttöliittymän tulee olla niin sanottu työpöytäsovellus.
 
