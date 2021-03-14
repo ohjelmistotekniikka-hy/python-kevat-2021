@@ -18,6 +18,11 @@ Tarkemmat arvosteluperusteet [täällä](./materiaali/arvosteluperusteet.md).
 
 Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu GitHubiin ja toimi [täällä](./materiaali/typokorjaukset.md) olevan ohjeen mukaan.
 
+## Kieli
+
+Voit tehdä kurssin Javalla tai Pythonilla. Tämä on Python-version kurssisivu. Java-version kurssisivu löytyy [täältä](https://github.com/ohjelmistotekniikka-hy/kevat-2021/blob/master/README.md)
+
+
 ## Ajankohtaista
 
 - Katso [täältä](https://github.com/ohjelmistotekniikka-hy/kevat-2021#ajankohtaista)
