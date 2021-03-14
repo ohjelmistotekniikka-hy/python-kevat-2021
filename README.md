@@ -43,6 +43,9 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 - Ohjeita
   - Kaikki ohjeista eivät ole kurssin alussa vielä ajankohtaisia. Kaikkeen tärkeään tulee aikanaan linkki laskareihin tai harjoitustöiden viikkotavoitteisiin
   - [Aiheideoita ja ohjeita työn harjoitustyön aloittamiseen](./materiaali/tyon-aloitus.md)
+  - [pytoniin liittyviä vihjeitä](./materiaali/python.md)
+  - [pygamen järkevä käyttö](./materiaali/pygame.md)
+  - [graafisten käyttöliittymien teko tkinter-kirjastolla](./materiaali/tkinter.md)
 - Työkaluja kaavioiden piirtoon
   - <http://yuml.me/> luokkakaaviot
   - <https://www.websequencediagrams.com/> sekvenssikaavioihin
