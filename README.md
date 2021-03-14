@@ -43,9 +43,15 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 - Ohjeita
   - Kaikki ohjeista eivät ole kurssin alussa vielä ajankohtaisia. Kaikkeen tärkeään tulee aikanaan linkki laskareihin tai harjoitustöiden viikkotavoitteisiin
   - [Aiheideoita ja ohjeita työn harjoitustyön aloittamiseen](./materiaali/tyon-aloitus.md)
-  - [pytoniin liittyviä vihjeitä](./materiaali/python.md)
+  - [Käyttöliittymän ja tietojen tallettamisen toteuttamiseen sekä sovelluksen konfigurointiin liittyviä vihjeitä](./materiaali/python.md)
   - [pygamen järkevä käyttö](./materiaali/pygame.md)
   - [graafisten käyttöliittymien teko tkinter-kirjastolla](./materiaali/tkinter.md)
+  - [unittest-kirjaston käyttö](./materiaali/unittest.md)
+  - [riippuvuuksien hallinta poetryllä](./materiaali/poetry.md)
+  - [pylint ja koodin laaduun staattinen analyysi](./materiaali/pylint.md)
+  - [Tehtävien suorittaminen ja Invoke](./materiaali/invoke.md)
+  - [Docstring ja koodin dokumentointi](./materiaali/docstring.md)
+  - [Koodin laatu](./materiaali/koodin-laatuvaatimukset.md)
 - Työkaluja kaavioiden piirtoon
   - <http://yuml.me/> luokkakaaviot
   - <https://www.websequencediagrams.com/> sekvenssikaavioihin
