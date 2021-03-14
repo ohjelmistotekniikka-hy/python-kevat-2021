@@ -38,13 +38,16 @@ Jotta ohjelmaa pystyisi testaamaan, on tärkeää että sovelluslogiikkaa [ei ki
 
 Eräs mahdollisuus on tehdä aluksi tekstikäyttöliittymän ja vasta saatuasi ohjelman perustoiminnallisuuden toteutettua voit siirtyä graafisen käyttöliittymän toteutukseen. Graafinen käyttöliittymä on mahdollista myös jättää pois, mutta tämä [vaikuttaa arvosanaan](./arvosteluperusteet.md). Graafisen käyttöliittymän toteutukseen löytyy ohjeita [täällä](./tkinter.md). Pelin toteutukseen Pygame-kirjastolla löytyy ohjeita [täältä](./pygame.md).
 
-Pygamea käyttäessä *et voi* tällä kurssilla noudataa samaa tyyliä mitä Ohjelmoinnin jatkokurssin Pygame-materiaalissa käytetään-. Koodi on siis strukturoitava järkevästi luokkien, metodien ja funktioiden avulla ja koodi on oltava automatisoidusti testattavaa ainakin suurimmilta osin.
 
 [Arvosanan kannalta suositeltavaa](./arvosteluperusteet.md) on, että ohjelmasi tallettaa dataa joko tiedostoon tai tietokantaan. Vihjeitä tiedon tallettamiseen [täällä](./python.md).
 
 Harjoitustyön tavoitteena on tuottaa ohjelma, joka voitaisiin antaa toiselle opiskelijalle ylläpidettäväksi ja täydennettäväksi. Lopullisessa palautuksessa on oltava lähdekoodin lisäksi dokumentaatio ja automaattiset testit.
 
 Toivottava dokumentaation taso käy ilmi [referenssiprojektissa](https://github.com/ohjelmistotekniikka-hy/python-todo-app).
+
+## Huomautus ja varoitus Pygamen käytöstä
+
+Pygamea käyttäessä *et voi* tällä kurssilla noudataa samaa tyyliä mitä Ohjelmoinnin jatkokurssin Pygame-materiaalissa käytetään. Koodi on siis strukturoitava järkevästi luokkien, metodien ja funktioiden avulla ja koodi on oltava automatisoidusti testattavaa ainakin suurimmilta osin. Pelin toteutukseen Pygame-kirjastolla löytyy ohjeita [täältä](./pygame.md).
 
 ## Projektin hakemistorakenne
 
