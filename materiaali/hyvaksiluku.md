@@ -19,7 +19,7 @@ Jos haluat hyväksilukea kurssin, ota sähköpostilla yhteyttä kurssin vastuuop
 
 ### Versionhallinta ja repositorio
 
-- Projektin lähdekoodin tulee olla [GitHub]-repositoriossa. Repositorio voi olla julkinen ja yksityinen. Jos repositorio on yksityinen, lisää sen kollaboraattoreiksi käyttäjät [Kaltsoon](https://github.com/Kaltsoon) ja [mluukkai](https://github.com/mluukkai)
+- Projektin lähdekoodin tulee olla GitHub-repositoriossa. Repositorio voi olla julkinen ja yksityinen. Jos repositorio on yksityinen, lisää sen kollaboraattoreiksi käyttäjät [Kaltsoon](https://github.com/Kaltsoon) ja [mluukkai](https://github.com/mluukkai)
 - Luo sovelluksesta [GitHub release](./release.md). Kerro repositorion `README.md`-tiedossa, mikä release pitää ladata ja miten se suoritetaan
 - Lisää repositorioon `README.md`-tiedosto, joka on suurin piirtein kurssin [referenssisovelluksen](https://github.com/ohjelmistotekniikka-hy/python-todo-app) mukainen. Mukana tulee olla vähintään seuraavat asiat:
   - Lyhyt kuvaus projektista
