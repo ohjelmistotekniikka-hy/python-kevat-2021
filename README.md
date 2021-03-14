@@ -23,6 +23,20 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 - Katso [täältä](https://github.com/ohjelmistotekniikka-hy/kevat-2021#ajankohtaista)
 - Jos olet jo toteuttaunut isohkoja ohjelmistoja, on kurssi tietyissä tapauksissa mahdollista [hyväksilukea](./materiaali/hyvaksiluku.md).
 
+## Linkkejä
+
+- [Kurssimateriaali](./materiaali/materiaali.md)
+- Viikoittaiset palautukset
+
+  - viikko 1 [laskarit](./tehtavat/viikko1.md)
+  - viikko 2 [laskarit](./tehtavat/viikko2.md) ja [harjoitustyö](./tehtavat/harjoitustyo_viikko2.md)
+  - viikko 3 [laskarit](./tehtavat/viikko3.md) ja [harjoitustyö](./tehtavat/harjoitustyo_viikko3.md)
+  - viikko 4 [harjoitustyö](./tehtavat/harjoitustyo_viikko4.md)
+  - viikko 5 [harjoitustyö](./tehtavat/harjoitustyo_viikko5.md)
+  - viikko 6 [harjoitustyö](./tehtavat/harjoitustyo_viikko6.md)
+  - viikko 7 [harjoitustyö](./tehtavat/harjoitustyo_viikko7.md)
+
+
 ## Aikataulu
 
 ### Viikko 1
