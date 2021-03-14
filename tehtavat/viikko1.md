@@ -647,9 +647,9 @@ Nyrkkisääntönä kannattaa pitää aina sitä, että kun rupeat työskentelem�
 
 ## Labtool
 
-Rekisteröi nyt omat tietosi ja luomasi repositorio [Labtooliin](https://study.cs.helsinki.fi/labtool/courses/TKT20002.2021.K.K.1). Valitse kurssiksi _Ohjelmistotekniikka_ jos joudut tekemään valinnan.
+Rekisteröi nyt omat tietosi ja luomasi repositorio [Labtooliin](https://study.cs.helsinki.fi/labtool/courses/TKT20002.2021.K.K.1).
 
-**HUOM** Labtool kysyy myös harjoitustyön aihetta (project name), kirjoita kenttään käyttämäsi ohjelmointikieli (eli Python).
+**HUOM** Labtool kysyy myös harjoitustyön aihetta (project name), kirjoita kenttään myös käyttämäsi ohjelmointikieli (eli Python).
 
 ## Lisää gitiä
 
