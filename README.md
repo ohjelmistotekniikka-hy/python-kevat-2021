@@ -55,7 +55,7 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 - Työkaluja kaavioiden piirtoon
   - <http://yuml.me/> luokkakaaviot
   - <https://www.websequencediagrams.com/> sekvenssikaavioihin
-  - <https://draw.io/> kaikki kaaviot
+  - <https://app.diagrams.net/> kaikki kaaviot
 
 ## Aikataulu
 
