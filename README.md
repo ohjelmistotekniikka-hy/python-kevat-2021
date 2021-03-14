@@ -38,7 +38,7 @@ Jos huomaat tehtävissä tai muussa materiaalissa kirjoitusvirheitä, kirjaudu G
 
 - Kurssin referenssisovellus [OtmTodoApp](https://github.com/ohjelmistotekniikka-hy/python-todo-app)
   - Sovelluksen tarkoituksena on demonstroida erästä tapaa tehdä suurin piirtein täysiin pisteisiin riittävä dokumentaatio ja testaus projektillesi. Itse ohjelma on sen verran suppea, että saadaksesi kurssilta arvosanan 5 joudut tekemään hieman laajemman sovelluksen.
-- Jos teet työn Pygamella, ota mallia [tästä](https://github.com/ohjelmistotekniikka-hy/pygame-sokoban) ohjelman strukturoinnissa, tällä kurssilla *eti voi* tehdä ohjelmaa samalla tyylillä kuin ohjelmoinnin jatkokurssin pygamea käsittelemissä esimerkeissä käytetään, eli luokkia ja metodeja on pakko käyttää ja ohjelman automatisoitu testaaminen tulee olla mahdollista
+- Jos teet työn Pygamella, ota mallia [tästä](https://github.com/ohjelmistotekniikka-hy/pygame-sokoban) ohjelman strukturoinnissa, tällä kurssilla *et voi* tehdä ohjelmaa samalla tyylillä kuin ohjelmoinnin jatkokurssin pygamea käsittelemissä esimerkeissä käytetään, eli luokkia ja metodeja on pakko käyttää ja ohjelman automatisoitu testaaminen tulee olla mahdollista
 - [Labtool](https://study.cs.helsinki.fi/labtool/courses/TKT20002.2021.K.K.1)
 - Ohjeita
   - Kaikki ohjeista eivät ole kurssin alussa vielä ajankohtaisia. Kaikkeen tärkeään tulee aikanaan linkki laskareihin tai harjoitustöiden viikkotavoitteisiin
