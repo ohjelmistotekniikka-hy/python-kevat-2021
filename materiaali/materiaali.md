@@ -158,7 +158,7 @@ Olet jo ehkä käyttänyt muilla kursseilla komentoriviä ja versionhallintaa, m
 
 Olet todennäköisesti ohjelmoinut Pythonia tähän asti ilman ulkoisia ulkoisten riippuvuuksien asennusta ja käyttöä. Alamme tämän kurssin myötä hieman tutkimaan, miten Pythonilla tehdyn ohjelmiston riippuvuuksien hallinta tapahtuu ja minkälaisia ovat siihen työskentelytavat.
 
-Python-projektien riippuvuuksien hallintaan on olemassa muutamiakin vaihtoehtoja, joista _pip_ saattaa olla jo ennestään tuttu. Kurssilla tutustumme [Poetry](https://python-poetry.org/-työkaluun, jolla on paljon samankaltaisuuksia pipin kanssa ja helpottaa työskentelyämme huomattavasti. Ohje Poetry käytön aloittamiseen löytyy [täältä](./poetry.md).
+Python-projektien riippuvuuksien hallintaan on olemassa muutamiakin vaihtoehtoja, joista _pip_ saattaa olla jo ennestään tuttu. Kurssilla tutustumme [Poetry](https://python-poetry.org/)-työkaluun, jolla on paljon samankaltaisuuksia pipin kanssa ja helpottaa työskentelyämme huomattavasti. Ohje Poetry käytön aloittamiseen löytyy [täältä](./poetry.md).
 
 ## Unittest
 
