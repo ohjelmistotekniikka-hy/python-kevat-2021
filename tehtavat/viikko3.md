@@ -14,8 +14,6 @@ Viikon palautuksista on tarjolla yksi kurssipiste. Pisteytys arvioidaan palautuk
 
 Huomaa, että tällä viikolla on myös harjoitustyöhön liittyviä [tavoitteita](./harjoitustyo_viikko3.md)
 
-## Mallivastaukset
-
 ## Luokkakaaviot
 
 Kertaa luokkakaavioihin liittyvät asiat [kurssimateriaalista](../materiaali/materiaali.md#luokkakaaviot).
