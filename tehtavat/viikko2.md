@@ -123,7 +123,7 @@ class Kassapaate:
 Avaa terminaali, mene palautusrepositoriosi hakemistoon _laskarit/viikko2_ ja suorita seuraavat komennot:
 
 ```bash
-wget https://raw.githubusercontent.com/ohjelmistotekniikka-hy/python-materiaali/master/misc/unicafe.zip
+wget https://raw.githubusercontent.com/ohjelmistotekniikka-hy/python-kevat-2021/master/misc/unicafe.zip
 unzip unicafe.zip
 rm unicafe.zip
 ```
